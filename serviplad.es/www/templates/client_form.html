@@ -1,0 +1,67 @@
+<ion-view title="Nuevo Cliente">
+  <ion-nav-buttons side="left">
+    <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
+  </ion-nav-buttons>
+
+  </ion-nav-buttons>
+  <ion-nav-buttons side="right">
+    <button  side="right" class="button button-icon"  ng-click="save()">
+        <i class="ion-plus-round"></i>
+      </button>
+  </ion-nav-buttons>
+  <ion-content class="has-header">
+
+  <label class="item item-input">
+  <span class="input-label">Nombre:</span>
+  <input type="text">
+</label>
+<label class="item item-input">
+  <span class="input-label">Primer Apellido:</span>
+  <input type="text">
+</label>
+<label class="item item-input">
+  <span class="input-label">Segundo apellido:</span>
+  <input type="text">
+</label>
+          <label class="item item-input">
+            <span class="input-label">Dirección:</span><!-- nexus/google calle, provincia-->
+            <input type="text">
+          </label>
+          <label class="item item-input">
+            <span class="input-label">Provincia</span><!-- nexus/google calle, provincia-->
+            <input type="text">
+          </label>
+          <label class="item item-input">
+            <span class="input-label">Ciudad</span><!-- nexus/google calle, provincia-->
+            <input type="text">
+          </label>
+<label class="item item-input">
+            <span class="input-label">DNI/CIF</span><!-- nexus/google calle, provincia-->
+            <input type="text">
+          </label>
+          <label class="item item-input">
+  <span class="input-label">Teléfono</span>
+  <input type="tel">
+</label>
+
+<label class="item item-input">
+  <span class="input-label">FAX</span>
+  <input type="tel">
+</label>
+
+<label class="item item-input">
+  <span class="input-label">EMAIL</span>
+  <input type="email">
+</label>
+  </ion-content>
+
+  <ion-footer-bar align-title="left" class="bar-assertive">
+  <!--<div class="buttons">
+    <button class="button">Left Button</button>
+  </div>
+  <h1 class="title">Title!</h1>-->
+  <div class="buttons" ng-click="doSomething()">
+    <button class="button">Guardar</button>
+  </div>
+</ion-footer-bar>
+</ion-view>

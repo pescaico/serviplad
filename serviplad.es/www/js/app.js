@@ -65,8 +65,35 @@ angular.module('starter', ['ionic', 'starter.controllers'])
           controller: 'PlaylistCtrl'
         }
       }
+    })
+    //metemos adicionales
+    .state('app.contactos', {
+      url: "/contactos",
+      views: {
+        'menuContent' :{
+          templateUrl: "templates/contactos.html",
+          controller: 'ContactosCtrl'
+        }
+      }
+    })
+    .state('app.contacto', {
+      url: "/contactos/:contactoId",
+      views: {
+        'menuContent' :{
+          templateUrl: "templates/contacto.html",
+          controller: 'ContactoCtrl'
+        }
+      }
+    })
+    .state('app.nuevoCliente', {
+      url: "/nuevoCliente/",
+      views: {
+        'menuContent' :{
+          templateUrl: "templates/client_form.html",
+          controller: 'NuevoClienteCtrl'
+        }
+      }
     });
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/app/playlists');
 });
-

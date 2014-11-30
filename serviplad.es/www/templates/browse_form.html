@@ -1,0 +1,119 @@
+  <ion-view title="Nueva Cliente">
+  <ion-nav-buttons side="left">
+  <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
+</ion-nav-buttons>
+
+<ion-nav-buttons side="right">
+<button  side="right" class="button button-icon ion-checkmark-round"  ng-click="goNewCliente()">
+
+</button>
+
+</ion-nav-buttons>
+
+<ion-content class="has-header">
+
+<form name="billForm" class="billForm" novalidate>
+
+ <div class="list">
+  <!-- FECHA  -->
+  <label class="item item-input-inset">
+    <span class="input-label">Fecha:</span>
+    <input type="date" name="fecha" ng-model="cliente.fecha" min="{{date}}" required value="{{date | date:'dd/MM/yyyy'}}">
+
+  </label>
+  <div class="item errors" ng-show="billForm.fecha.$dirty && billForm.fecha.$invalid">
+    <p ng-show="billForm.fecha.$error.required">Fecha requerida</p>
+    <p ng-show="billForm.fecha.$invalid">Fecha incorrecta</p>
+  </div>
+
+<!-- DIRECCION -->
+<label class="item item-input-inset">
+  <span class="input-label">Dirección:</span><!-- nexus/google calle, provincia ??-->
+  <input type="text" name="direccion" ng-model="cliente.direccion" ng-minlength="4" required placeholder="Dirección">
+</label>
+<div class="item errors" ng-show="billForm.direccion.$dirty && billForm.direccion.$invalid">
+    <p ng-show="billForm.direccion.$error.required">Dirección requerida</p>
+    <p ng-show="billForm.direccion.$error.minlength">La dirección tiene que tener más letras</p>
+</div>
+
+<!-- CIUDAD -->
+<label class="item item-input-inset">
+  <span class="input-label">Ciudad</span><!-- nexus/google calle, provincia-->
+  <input type="text" name="ciudad" ng-model="cliente.ciudad" ng-minlength="4" ng-focus required placeholder="Ciudad">
+</label>
+<div class="item errors" ng-show="billForm.ciudad.$dirty && billForm.ciudad.$invalid">
+    <p ng-show="billForm.ciudad.$error.required">Ciudad requerida</p>
+    <p ng-show="billForm.ciudad.$error.minlength">La ciuidad tiene que tener más letras</p>
+</div>
+
+<!-- PROVINCIA -->
+<label class="item item-input-inset">
+  <span class="input-label">Provincia</span><!-- nexus/google calle, provincia-->
+  <input type="text" name="provincia" ng-model="cliente.provincia" ng-minlength="4" ng-focus has-blurred="false" required placeholder="Provincia">
+</label>
+<div class="item errors" ng-show="billForm.provincia.$dirty && billForm.provincia.$invalid">
+    <p ng-show="billForm.provincia.$error.required">Provincia requerida</p>
+    <p ng-show="billForm.provincia.$error.minlength">La provincia tiene que tener más letras</p>
+  </div>
+
+<!-- CLIENTE--> 
+<i class="icon ion-person  placeholder-icon"></i>
+    <input type="search" placeholder="Search" ng-change="search()" ng-model="data.search">
+  </label>
+  <button class="button button-balanced ion-person-add" ng-click="goNewClienteForm()">
+    </button>    
+
+<label class="item item-input-inset">
+  <span class="input-label">CLIENTE</span><!-- nexus/google calle, provincia-->
+  <select name="cliente" ng-model="cliente.cliente" ng-options="cliente.complete_name for cliente in clientes" required>
+</label>
+
+<!-- CONTACTO -->
+<label class="item item-input-inset">
+  <span class="input-label">CONTACTO</span>
+  <select name="contacto" ng-model="cliente.contacto" ng-options="contacto.complete_name for contacto in contactos" required>
+</label>
+
+
+<div class="item item-button-right linea_cliente">
+    LÍNEAS FACTURA
+    <button class="button button-balanced" ng-click="showPopup()">
+      <i class="ion-ios7-plus" ></i>
+    </button>
+  </div>
+
+  <div id="lineas-cliente">
+    
+  </div>
+
+<label class="item item-input-inset">
+  <span class="input-label">BASE IMPONIBLE</span><!-- nexus/google calle, provincia-->
+  <span class="input-label" id="total-factura">20 EUROS</span><!-- nexus/google calle, provincia-->
+</label>
+<label class="item item-input-inset">
+  <span class="input-label">IVA</span><!-- nexus/google calle, provincia-->
+  <span class="input-label" id="factura-IVA">25 EUROS</span><!-- nexus/google calle, provincia-->
+</label>
+<label class="item item-input-inset">
+  <span class="input-label">TOTAL CON IVA</span><!-- nexus/google calle, provincia-->
+  <span class="input-label" id="total-factura-IVA">25 EUROS</span><!-- nexus/google calle, provincia-->
+</label>
+    <addlineasbuttonC></addlineasbutton>
+    <div id="lineas-cliente">
+
+
+<button class="button button-balanced" ng-disabled="billForm.$invalid">Submit</button> <span>Submitted {{cliente.submissions}} times.  Fields Submitted : {{cliente.summary}}</span>
+
+</form>
+</ion-content>
+
+  <!--  <ion-footer-bar align-title="left" class="bar-assertive">
+    <!--<div class="buttons">
+      <button class="button">Left Button</button>
+    </div>
+    <h1 class="title">Title!</h1>-->
+    <!--<div class="buttons" ng-click="doSomething()">
+      <button class="button">Guardar</button>
+    </div>
+  </ion-footer-bar>-->
+</ion-view>

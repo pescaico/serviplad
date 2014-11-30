@@ -1,1 +1,28 @@
 /* Empty. Add your own CSS if you like */
+.errors p {
+  color: red;
+}
+.item .errors {
+  color: red;
+}
+
+.lineas_factura {
+	background-color:  #D3E1F7;
+	/*rgb(211, 225, 247); ctrl sift c */
+}
+
+.linea_factura {
+	background-color:  #ECFFD9;
+	/*rgb(211, 225, 247); ctrl sift c */
+}
+/*.clientForm .ng-invalid {
+    border-bottom: 3px solid red;
+}*/
+
+section{
+    padding: 2em;   
+}
+button{
+    padding:0.3em;
+    margin: 0.3em;
+}

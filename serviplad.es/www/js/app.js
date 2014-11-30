@@ -19,7 +19,23 @@ angular.module('starter', ['ionic', 'starter.controllers'])
     }
   });
 })
+.config(['$provide', function($provide){
+        $provide.decorator('$rootScope', ['$delegate', function($delegate){
 
+            Object.defineProperty($delegate.constructor.prototype, '$onRootScope', {
+                value: function(name, listener){
+                    var unsubscribe = $delegate.$on(name, listener);
+                    this.$on('$destroy', unsubscribe);
+
+                    return unsubscribe;
+                },
+                enumerable: false
+            });
+
+
+            return $delegate;
+        }]);
+    }])
 .config(function($stateProvider, $urlRouterProvider) {
   $stateProvider
 
@@ -30,11 +46,12 @@ angular.module('starter', ['ionic', 'starter.controllers'])
       controller: 'AppCtrl'
     })
 
-    .state('app.search', {
-      url: "/search",
+    .state('app.facturas', {
+      url: "/facturas",
       views: {
         'menuContent' :{
-          templateUrl: "templates/search.html"
+          templateUrl: "templates/facturas.html",
+          controller: 'FacturasCtrl'
         }
       }
     })
@@ -43,7 +60,8 @@ angular.module('starter', ['ionic', 'starter.controllers'])
       url: "/browse",
       views: {
         'menuContent' :{
-          templateUrl: "templates/browse.html"
+          templateUrl: "templates/browse.html",
+          controller: 'ClientesCtrl'
         }
       }
     })
@@ -91,6 +109,24 @@ angular.module('starter', ['ionic', 'starter.controllers'])
         'menuContent' :{
           templateUrl: "templates/client_form.html",
           controller: 'NuevoClienteCtrl'
+        }
+      }
+    })
+    .state('app.nuevaFactura', {
+      url: "/nuevaFactura/",
+      views: {
+        'menuContent' :{
+          templateUrl: "templates/bill_form.html",
+          controller: 'NuevaFacturaCtrl'
+        }
+      }
+    })
+    .state('app.nuevaCliente', {
+      url: "/nuevaCliente/",
+      views: {
+        'menuContent' :{
+          templateUrl: "templates/browse_form.html",
+          controller: 'NuevaClienteCtrl'
         }
       }
     });

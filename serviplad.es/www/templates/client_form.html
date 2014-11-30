@@ -1,67 +1,137 @@
-<ion-view title="Nuevo Cliente">
+  <ion-view title="Nuevo Cliente">
   <ion-nav-buttons side="left">
-    <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
-  </ion-nav-buttons>
+  <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
+</ion-nav-buttons>
 
-  </ion-nav-buttons>
-  <ion-nav-buttons side="right">
-    <button  side="right" class="button button-icon"  ng-click="save()">
-        <i class="ion-plus-round"></i>
-      </button>
-  </ion-nav-buttons>
-  <ion-content class="has-header">
+<ion-nav-buttons side="right">
+<button  side="right" class="button button-icon ion-checkmark-round"  ng-click="goNewClient()">
 
-  <label class="item item-input">
-  <span class="input-label">Nombre:</span>
-  <input type="text">
+</button>
+
+</ion-nav-buttons>
+
+<ion-content class="has-header">
+
+<form name="clientForm" class="clientForm" novalidate>
+
+ <div class="list">
+  <label class="item item-input-inset">
+      <span class="input-label">Empresa:</span>
+     <label class="toggle toggle-balanced">
+       <input type="checkbox" name="empresa" ng-model="cliente.empresa"> 
+       <div class="track">
+         <div class="handle"></div>
+       </div>
+     </label>
+
 </label>
-<label class="item item-input">
+  <!-- NOMBRE -->
+  <label class="item item-input-inset">
+    <span class="input-label">Nombre:</span>
+    <input type="text" name="nombre" ng-model="cliente.nombre" ng-minlength="3" ng-maxlength="10" required placeholder="Nombre">
+  </label>
+  <div class="item errors" ng-show="clientForm.nombre.$dirty && clientForm.nombre.$invalid">
+    <p ng-show="clientForm.nombre.$error.required">Nombre requerido</p>
+    <p ng-show="clientForm.nombre.$error.minlength">El nombre tiene que tener más letras</p>
+    <p ng-show="clientForm.nombre.$error.maxlength">El nombre tiene que tener menos letras</p>
+  </div>
+
+<!-- 1er apellido-->
+<label class="item item-input-inset">
   <span class="input-label">Primer Apellido:</span>
-  <input type="text">
+  <input type="text" name="primerapellido" ng-model="cliente.primerapellido" placeholder="1er apellido">
 </label>
-<label class="item item-input">
+<!-- 2º apellido-->
+<label class="item item-input-inset">
   <span class="input-label">Segundo apellido:</span>
-  <input type="text">
+  <input type="text" name="segundoapellido" ng-model="cliente.segundoapellido" placeholder="2º apellido">
 </label>
-          <label class="item item-input">
-            <span class="input-label">Dirección:</span><!-- nexus/google calle, provincia-->
-            <input type="text">
-          </label>
-          <label class="item item-input">
-            <span class="input-label">Provincia</span><!-- nexus/google calle, provincia-->
-            <input type="text">
-          </label>
-          <label class="item item-input">
-            <span class="input-label">Ciudad</span><!-- nexus/google calle, provincia-->
-            <input type="text">
-          </label>
-<label class="item item-input">
-            <span class="input-label">DNI/CIF</span><!-- nexus/google calle, provincia-->
-            <input type="text">
-          </label>
-          <label class="item item-input">
+<!-- DIRECCION -->
+<label class="item item-input-inset">
+  <span class="input-label">Dirección:</span><!-- nexus/google calle, provincia ??-->
+  <input type="text" name="direccion" ng-model="cliente.direccion" ng-minlength="4" required placeholder="Dirección">
+</label>
+<div class="item errors" ng-show="clientForm.direccion.$dirty && clientForm.direccion.$invalid">
+    <p ng-show="clientForm.direccion.$error.required">Dirección requerida</p>
+    <p ng-show="clientForm.direccion.$error.minlength">La dirección tiene que tener más letras</p>
+</div>
+
+<!-- CIUDAD -->
+<label class="item item-input-inset">
+  <span class="input-label">Ciudad</span><!-- nexus/google calle, provincia-->
+  <input type="text" name="ciudad" ng-model="cliente.ciudad" ng-minlength="4" ng-focus required placeholder="Ciudad">
+</label>
+<div class="item errors" ng-show="clientForm.ciudad.$dirty && clientForm.ciudad.$invalid">
+    <p ng-show="clientForm.ciudad.$error.required">Ciudad requerida</p>
+    <p ng-show="clientForm.ciudad.$error.minlength">La ciuidad tiene que tener más letras</p>
+</div>
+
+<!-- PROVINCIA -->
+<label class="item item-input-inset">
+  <span class="input-label">Provincia</span><!-- nexus/google calle, provincia-->
+  <input type="text" name="provincia" ng-model="cliente.provincia" ng-minlength="4" ng-focus has-blurred="false" required placeholder="Provincia">
+</label>
+<div class="item errors" ng-show="clientForm.provincia.$dirty && clientForm.provincia.$invalid">
+    <p ng-show="clientForm.provincia.$error.required">Provincia requerida</p>
+    <p ng-show="clientForm.provincia.$error.minlength">La provincia tiene que tener más letras</p>
+  </div>
+
+<!-- DNI --> 
+<label class="item item-input-inset">
+  <span class="input-label">DNI/CIF</span><!-- nexus/google calle, provincia-->
+  <!--<input type="text" name="dnicif" ng-model="cliente.dnicif" ng-pattern="/^[0-9]{8}[a-zA-Z]{1}$/" required placeholder="CIF/NIF">-->
+<input type="text" name="dnicif" ng-model="cliente.dnicif" ng-pattern="/((^[A-Z]{1}[0-9]{7}[A-Z0-9]{1}$|^[T]{1}[A-Z0-9]{8}$)|^[0-9]{8}[A-Z]{1}$)/" required placeholder="CIF/NIF">
+  
+
+</label>
+<div class="item errors" ng-show="clientForm.dnicif.$dirty && clientForm.dnicif.$invalid">
+   <p ng-show="clientForm.dnicif.$error.$invalid">El CIF/NIF/NIE  ESTÁ MAL.</p>
+   <p ng-show="clientForm.dnicif.$error.required">DNI/NIF/NIE requerido</p>
+   <p ng-show="clientForm.dnicif.$error.pattern">DNI/NIF/NIE con mal formato</p>
+  
+</div>
+
+<!--TELEFONO-->
+<label class="item item-input-inset">
   <span class="input-label">Teléfono</span>
-  <input type="tel">
+  <input type="tel" name="telefono" ng-model="cliente.telefono" ng-pattern="/^\+?(9[976]\d|8[987530]\d|6[987]\d|5[90]\d|42\d|3[875]\d|2[98654321]\d|9[8543210]|8[6421]|6[6543210]|5[87654321]|4[987654310]|3[9643210]|2[70]|7|1)\d{1,14}$/" required placeholder="telefono">
 </label>
+<div class="item errors" ng-show="clientForm.telefono.$dirty && clientForm.telefono.$invalid">
+   <p ng-show="clientForm.telefono.$error.pattern">No es un telefono válido.</p>
+   <p ng-show="clientForm.telefono.$error.required">Telefono requerido</p>
+</div>
 
-<label class="item item-input">
+<!-- FAX -->   
+<label class="item item-input-inset">
   <span class="input-label">FAX</span>
-  <input type="tel">
+  <input type="tel" name="fax" ng-model="cliente.fax" ng-pattern="/^\+?(9[976]\d|8[987530]\d|6[987]\d|5[90]\d|42\d|3[875]\d|2[98654321]\d|9[8543210]|8[6421]|6[6543210]|5[87654321]|4[987654310]|3[9643210]|2[70]|7|1)\d{1,14}$/" placeholder="FAX">
 </label>
+<div class="item errors" ng-show="clientForm.fax.$dirty && clientForm.fax.$invalid">
+   <p ng-show="clientForm.fax.$error.pattern">No es un fax válido.</p>
+</div>
 
-<label class="item item-input">
+
+<!-- EMAIL --> 
+<label class="item item-input-inset">
   <span class="input-label">EMAIL</span>
-  <input type="email">
+  <input type="email" name="uEmail" ng-model="cliente.email">
 </label>
-  </ion-content>
+<div class="item errors" ng-show="clientForm.uEmail.$dirty && clientForm.uEmail.$invalid">
+  <p ng-show="clientForm.uEmail.$error.email">No es un email válido.</p>
+</div>
 
-  <ion-footer-bar align-title="left" class="bar-assertive">
-  <!--<div class="buttons">
-    <button class="button">Left Button</button>
-  </div>
-  <h1 class="title">Title!</h1>-->
-  <div class="buttons" ng-click="doSomething()">
-    <button class="button">Guardar</button>
-  </div>
-</ion-footer-bar>
+<button class="button button-balanced" ng-disabled="clientForm.$invalid">Submit</button> <span>Submitted {{cliente.submissions}} times.  Fields Submitted : {{cliente.summary}}</span>
+
+</form>
+</ion-content>
+
+  <!--  <ion-footer-bar align-title="left" class="bar-assertive">
+    <!--<div class="buttons">
+      <button class="button">Left Button</button>
+    </div>
+    <h1 class="title">Title!</h1>-->
+    <!--<div class="buttons" ng-click="doSomething()">
+      <button class="button">Guardar</button>
+    </div>
+  </ion-footer-bar>-->
 </ion-view>

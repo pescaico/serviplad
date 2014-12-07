@@ -1,4 +1,3 @@
-/** FACTORY SHARED **/
 angular.module('starter.controllers')
 .factory('mySharedService', function($rootScope) {
     var sharedService = {};

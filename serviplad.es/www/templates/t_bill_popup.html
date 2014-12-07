@@ -1,0 +1,3 @@
+<input type="text" ng-minlength="1" ng-required="true"    id="linea_nombre_{{lineas}}"   ng-model="factura.materiales[lineas+'a'].nombre" placeholder="material">
+<input type="text" smart-float      ng-required="true"    id="linea_cantidad_{{lineas}}" ng-model="factura.materiales[lineas+'a'].cantidad" placeholder="cantidad" >
+<input type="text" smart-float      ng-required="false"   id="linea_precio_{{lineas}}"   ng-model="factura.materiales[lineas+'a'].precio" placeholder="precio unidad">

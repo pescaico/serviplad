@@ -1,7 +1,5 @@
 angular.module('starter.controllers')
 
-
-
 //Directive for adding buttons on click that show an alert on click
 .directive("addlineasbutton", function(){
   return {
@@ -24,12 +22,15 @@ angular.module('starter.controllers')
     });
   };
 })
-.directive("removeOnClick", function(){
+.directive("removeOnClickBill", function(){
   return function(scope, element, attrs){
     element.bind("click", function(){
-      console.log(attrs.id);
-      console.log(element);
-      console.log(element.parent());
+
+
+
+      /*var linea = parseInt(element.attr("linea"));
+      scope.cliente.materiales.splice(linea, 1);
+      lineas--;*/
       element.parent().remove();
     });
   };
@@ -44,9 +45,6 @@ angular.module('starter.controllers')
     });
   };
 })
-
-
-
 
 .controller('FacturasCtrl', function($scope, FacturasService, $timeout, $http, $state) {
   
@@ -91,31 +89,7 @@ angular.module('starter.controllers')
  };
 
 })
-.controller('NuevaFacturaCtrl', function($scope, FacturasService, $stateParams, $http) {
-  $scope.contacto = FacturasService.get($stateParams.facturaId);
-  $scope.title = "Nueva Factura";
-  //$scope.focusManager = { focusInputOnBlur: true};
 
-  $scope.lineas = 0;
-  $scope.factura = {
-    fecha : new Date(),
-    direccion : "",
-    provincia: "",
-    ciudad: "",
-    dnicif: "",
-    telf: "",
-    fax: "",
-    eamil: "",
-    submissions:0,
-    summary:""
-
-  };
-
-  $scope.submit = function() {
-    $scope.factura.submissions++;
-    $scope.factura.summary = angular.copy($scope.factura.nombre) ;
-  };
-})
 .factory('FacturasService', function($q, $timeout) {
   var facturas = [
   { nombre: 'Paco', apellidos:'Pérez Galdós', id: 1 },
@@ -147,3 +121,6 @@ angular.module('starter.controllers')
     },
   }
 })
+
+
+;

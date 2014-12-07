@@ -41,3 +41,7 @@ button{
     z-index:100;
    /* height:200px;*/
 }
+
+input.has-visited.ng-invalid:not(.has-focus) {
+    background-color: #ffeeee;   
+}

@@ -1,14 +1,40 @@
 angular.module('starter.controllers')
-.controller('NuevoClienteCtrl', function($scope, ContactosService, mySharedService, $stateParams, $http) {
+.controller('NuevoClienteCtrl', function($scope, ContactosService, $state, mySharedService, $stateParams, $http) {
+
+
+  $scope.isOk = function() {    
+    return $scope.clientForm.$valid;
+  }
+
+  $scope.saveAndGoBack = function() {
+    //$window.history.back();
+    if ( mySharedService.type == "cliente") {
+      mySharedService.message.cliente = $scope.cliente;
+    } else {
+      mySharedService.message.contacto = $scope.cliente;
+    }
+
+    mySharedService.prepForBroadcast(mySharedService.message,"");
+    $state.go('app.nuevaFactura'); 
+
+  }
 
   $scope.contacto = ContactosService.get($stateParams.contactoId);
   $scope.title = "Nuevo Cliente";
   //$scope.focusManager = { focusInputOnBlur: true};
 
-  $scope.$on('handleBroadcast', function() {
+$scope.$on('handleBroadcast', function() {
         console.log('CARGA MÁS FACTURAS!');
+
         //alert(mySharedService.message.provincia);
-    });        
+          if ( mySharedService.type == "cliente") {
+             $scope.cliente = mySharedService.message.cliente ;
+    } else {
+      $scope.cliente = mySharedService.message.contacto;
+    }
+    });
+
+
   //alert(mySharedService.message.provincia);
   $scope.cliente = {
     nombre : "a",
@@ -25,7 +51,7 @@ angular.module('starter.controllers')
     summary:""
 
   };
-
+$scope.cliente = mySharedService.message.cliente;
   $scope.submit = function() {
     $scope.cliente.submissions++;
     $scope.cliente.summary = angular.copy($scope.cliente.nombre) ;

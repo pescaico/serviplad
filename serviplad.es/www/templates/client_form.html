@@ -2,23 +2,19 @@
   <ion-nav-buttons side="left">
   <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
 </ion-nav-buttons>
-
 <ion-nav-buttons side="right">
-<button  side="right" class="button button-icon ion-checkmark-round"  ng-click="goNewClient()">
-
-</button>
-
+  <button side="right" class="button button-icon ion-checkmark-round"  ng-hide="!isOk()" ng-click="saveAndGoBack()"></button>
 </ion-nav-buttons>
 
 <ion-content class="has-header">
 
-<form name="clientForm" class="clientForm" novalidate>
+<form name="$parent.clientForm" id="clientForm" class="clientForm" novalidate>
 
  <div class="list">
   <label class="item item-input-inset">
       <span class="input-label">Empresa:</span>
      <label class="toggle toggle-balanced">
-       <input type="checkbox" name="empresa" ng-model="cliente.empresa"> 
+       <input type="checkbox" name="empresa" ng-model="cliente.empresa" ng-model="cliente.primerapellido"> 
        <div class="track">
          <div class="handle"></div>
        </div>
@@ -27,7 +23,6 @@
 </label>
   <!-- NOMBRE -->
   <label class="item item-input-inset">
-    <span class="input-label">Nombre:</span>
     <input type="text" name="nombre" ng-model="cliente.nombre" ng-minlength="3" ng-maxlength="10" required placeholder="Nombre">
   </label>
   <div class="item errors" ng-show="clientForm.nombre.$dirty && clientForm.nombre.$invalid">
@@ -38,17 +33,14 @@
 
 <!-- 1er apellido-->
 <label class="item item-input-inset">
-  <span class="input-label">Primer Apellido:</span>
   <input type="text" name="primerapellido" ng-model="cliente.primerapellido" placeholder="1er apellido">
 </label>
 <!-- 2º apellido-->
 <label class="item item-input-inset">
-  <span class="input-label">Segundo apellido:</span>
   <input type="text" name="segundoapellido" ng-model="cliente.segundoapellido" placeholder="2º apellido">
 </label>
 <!-- DIRECCION -->
 <label class="item item-input-inset">
-  <span class="input-label">Dirección:</span><!-- nexus/google calle, provincia ??-->
   <input type="text" name="direccion" ng-model="cliente.direccion" ng-minlength="4" required placeholder="Dirección">
 </label>
 <div class="item errors" ng-show="clientForm.direccion.$dirty && clientForm.direccion.$invalid">
@@ -58,7 +50,6 @@
 
 <!-- CIUDAD -->
 <label class="item item-input-inset">
-  <span class="input-label">Ciudad</span><!-- nexus/google calle, provincia-->
   <input type="text" name="ciudad" ng-model="cliente.ciudad" ng-minlength="4" ng-focus required placeholder="Ciudad">
 </label>
 <div class="item errors" ng-show="clientForm.ciudad.$dirty && clientForm.ciudad.$invalid">
@@ -68,7 +59,6 @@
 
 <!-- PROVINCIA -->
 <label class="item item-input-inset">
-  <span class="input-label">Provincia</span><!-- nexus/google calle, provincia-->
   <input type="text" name="provincia" ng-model="cliente.provincia" ng-minlength="4" ng-focus has-blurred="false" required placeholder="Provincia">
 </label>
 <div class="item errors" ng-show="clientForm.provincia.$dirty && clientForm.provincia.$invalid">
@@ -78,8 +68,6 @@
 
 <!-- DNI --> 
 <label class="item item-input-inset">
-  <span class="input-label">DNI/CIF</span><!-- nexus/google calle, provincia-->
-  <!--<input type="text" name="dnicif" ng-model="cliente.dnicif" ng-pattern="/^[0-9]{8}[a-zA-Z]{1}$/" required placeholder="CIF/NIF">-->
 <input type="text" name="dnicif" ng-model="cliente.dnicif" ng-pattern="/((^[A-Z]{1}[0-9]{7}[A-Z0-9]{1}$|^[T]{1}[A-Z0-9]{8}$)|^[0-9]{8}[A-Z]{1}$)/" required placeholder="CIF/NIF">
   
 
@@ -93,7 +81,6 @@
 
 <!--TELEFONO-->
 <label class="item item-input-inset">
-  <span class="input-label">Teléfono</span>
   <input type="tel" name="telefono" ng-model="cliente.telefono" ng-pattern="/^\+?(9[976]\d|8[987530]\d|6[987]\d|5[90]\d|42\d|3[875]\d|2[98654321]\d|9[8543210]|8[6421]|6[6543210]|5[87654321]|4[987654310]|3[9643210]|2[70]|7|1)\d{1,14}$/" required placeholder="telefono">
 </label>
 <div class="item errors" ng-show="clientForm.telefono.$dirty && clientForm.telefono.$invalid">
@@ -103,7 +90,6 @@
 
 <!-- FAX -->   
 <label class="item item-input-inset">
-  <span class="input-label">FAX</span>
   <input type="tel" name="fax" ng-model="cliente.fax" ng-pattern="/^\+?(9[976]\d|8[987530]\d|6[987]\d|5[90]\d|42\d|3[875]\d|2[98654321]\d|9[8543210]|8[6421]|6[6543210]|5[87654321]|4[987654310]|3[9643210]|2[70]|7|1)\d{1,14}$/" placeholder="FAX">
 </label>
 <div class="item errors" ng-show="clientForm.fax.$dirty && clientForm.fax.$invalid">
@@ -113,25 +99,11 @@
 
 <!-- EMAIL --> 
 <label class="item item-input-inset">
-  <span class="input-label">EMAIL</span>
   <input type="email" name="uEmail" ng-model="cliente.email">
 </label>
 <div class="item errors" ng-show="clientForm.uEmail.$dirty && clientForm.uEmail.$invalid">
   <p ng-show="clientForm.uEmail.$error.email">No es un email válido.</p>
 </div>
-
-<button class="button button-balanced" ng-disabled="clientForm.$invalid">Submit</button> <span>Submitted {{cliente.submissions}} times.  Fields Submitted : {{cliente.summary}}</span>
-
 </form>
 </ion-content>
-
-  <!--  <ion-footer-bar align-title="left" class="bar-assertive">
-    <!--<div class="buttons">
-      <button class="button">Left Button</button>
-    </div>
-    <h1 class="title">Title!</h1>-->
-    <!--<div class="buttons" ng-click="doSomething()">
-      <button class="button">Guardar</button>
-    </div>
-  </ion-footer-bar>-->
 </ion-view>

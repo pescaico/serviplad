@@ -42,12 +42,12 @@
       <p ng-show="billForm.provincia.$error.minlength">La provincia tiene que tener más letras</p>
     </div>
 
-    <div class="item errors" ng-show="billForm.provincia.$dirty && billForm.provincia.$invalid">
-      <p ng-show="billForm.provincia.$error.required">Cliente requerido</p>
-    </div>
+    
     <!-- CLIENTE--> 
     <ion-select  dataselect="tipoCliente" label-field="nombre" provider="clientes" required name="cliente" ng-model="factura.cliente"></ion-select>
-    
+    <div class="item errors" ng-show="billForm.cliente.$dirty && billForm.cliente.$invalid">
+      <p ng-show="billForm.cliente.$error.required">Cliente requerido</p>
+    </div>
 
     <!-- CONTACTO -->
     <ion-select  dataselect="tipoContacto" label-field="nombre" provider="contactos" name="contacto" ng-model="factura.contacto"></ion-select>
@@ -60,16 +60,16 @@
     <div id="lineas-factura"></div>
     <label class="item item-input-inset">
       <span class="input-label">BASE IMPONIBLE</span><!-- nexus/google calle, provincia-->
-      <span class="input-label" id="total-factura">20 EUROS</span><!-- nexus/google calle, provincia-->
+      <span class="input-label" id="total-factura">0 €</span><!-- nexus/google calle, provincia-->
     </label>
 
     <label class="item item-input-inset">
       <span class="input-label">IVA</span><!-- nexus/google calle, provincia-->
-      <span class="input-label" id="factura-IVA">25 EUROS</span><!-- nexus/google calle, provincia-->
+      <span class="input-label" id="factura-IVA">0 €</span><!-- nexus/google calle, provincia-->
     </label>
     <label class="item item-input-inset">
       <span class="input-label">TOTAL CON IVA</span><!-- nexus/google calle, provincia-->
-      <span class="input-label" id="total-factura-IVA">25 EUROS</span><!-- nexus/google calle, provincia-->
+      <span class="input-label" id="total-factura-IVA">0 €</span><!-- nexus/google calle, provincia-->
     </label>
 
 

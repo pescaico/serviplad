@@ -42,6 +42,10 @@ button{
    /* height:200px;*/
 }
 
+.list_options {
+  background: aliceblue;
+}
+
 input.has-visited.ng-invalid:not(.has-focus) {
     background-color: #ffeeee;   
 }

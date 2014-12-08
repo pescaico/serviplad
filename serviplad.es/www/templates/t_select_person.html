@@ -14,7 +14,7 @@
   <div class="optionList padding-left padding-right" ng-show="showHide"> 
     <ion-scroll> 
       <ul class="list"> 
-        <li class="item" ng-click="selecionar(item)" ng-repeat="item in provider | dynamicFilter:[labelField,ngModel]">{{item[labelField]}}</li> 
+        <li class="item list_options" ng-click="selecionar(item)" ng-repeat="item in provider | dynamicFilter:[labelField,ngModel]">{{item[labelField]}}</li> 
       </ul> 
     </ion-scroll> 
   </div> 

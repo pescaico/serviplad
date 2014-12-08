@@ -1,6 +1,6 @@
 angular.module('starter.controllers')
 
-.controller('NuevaFacturaCtrl', function($scope,  DataService, mySharedService, $stateParams, $ionicPopup, $timeout, $http, $compile, $state) {
+.controller('NuevaFacturaCtrl', function($scope, $rootScope,  DataService, mySharedService, $stateParams, $ionicPopup, $timeout, $http, $compile, $state) {
   //$scope.contacto = FacturasService.get($stateParams.facturaId);
   $scope.title = "Nueva Factura";
   //$scope.focusManager = { focusInputOnBlur: true};
@@ -11,29 +11,17 @@ angular.module('starter.controllers')
   $scope.provincias = DataService.getList().provincias;
   $scope.contactos = DataService.getList().contactos;
 
+  $scope.tipoCliente = { placeholder: 'Cliente', required: true, ngMinLength:4, name:'cliente', type:'text'};
+  $scope.tipoContacto = { placeholder: 'Contacto',required: false, ngMinLength:4, name:'contacto', type:'text'};
+  $scope.tipoCiudad = { placeholder: 'Ciudad', required: true, ngMinLength:4, name:'provincia', type:'text'};
+  $scope.tipoProvincia = { placeholder: 'Provincia', required: true, ngMinLength:4, name:'ciudad', type:'text'};
+
   $scope.lineas = 0;
   $scope.numLineas = 0;
-  $scope.factura = {
-    fecha : new Date(),
-    direccion : "",
-    provincia: "",
-    ciudad: "",
-    cliente: null,
-    contacto: null,
-    summary:"",
-    materiales: []
-  };
+  $scope.factura = mySharedService.message;
 
-  $scope.isOk = function() {
-/*
-    if($scope.billForm.ciudad.$valid &&
-    $scope.billForm.provincia.$valid &&
-    $scope.billForm.cliente.$valid &&
-    $scope.billForm.contacto.$valid &&
-    $scope.billForm.direccion.$valid) {
-      //$scope.billForm.$setValidity(true);
-    }*/
-    
+
+  $scope.isOk = function() {    
     return $scope.billForm.$valid;
   }
 
@@ -41,26 +29,24 @@ angular.module('starter.controllers')
     alert('go to save');
   }
 
-
-  $scope.tipoCliente = { placeholder: 'Cliente', required: true, ngMinLength:4, name:'cliente', type:'text'};
-  $scope.tipoContacto = { placeholder: 'Contacto',required: false, ngMinLength:4, name:'contacto', type:'text'};
-  $scope.tipoCiudad = { placeholder: 'Ciudad', required: true, ngMinLength:4, name:'provincia', type:'text'};
-  $scope.tipoProvincia = { placeholder: 'Provincia', required: true, ngMinLength:4, name:'ciudad', type:'text'};
-
-
-  $scope.goNewClienteForm = function() {
-    mySharedService.prepForBroadcast($scope.cliente);
-    $state.go('app.nuevoCliente'); 
-  };
-
-  $scope.$on('handleBroadcast', function() {
-    $scope.message = mySharedService.message;
-  });
-
   $scope.submit = function() {
     $scope.factura.submissions++;
     $scope.factura.summary = angular.copy($scope.factura.nombre) ;
   };
+
+  $scope.goNewClienteForm = function() {
+    mySharedService.prepForBroadcast($scope.factura,"cliente");
+    $state.go('app.nuevoCliente'); 
+  };
+
+  $scope.goNewContactoForm = function() {
+    mySharedService.prepForBroadcast($scope.factura, "contacto");
+    $state.go('app.nuevoCliente'); 
+  };
+
+  $scope.$on('handleBroadcast', function() {
+    $scope.factura = mySharedService.message;
+  });
 
   $scope.removeLinea = function(linea) {
     delete $scope.factura.materiales[linea];
@@ -84,13 +70,11 @@ angular.module('starter.controllers')
     ivaAplicado = Math.round(ivaAplicado*100)/100;
     totalIVA = ivaAplicado + total;
     totalIVA = Math.round(totalIVA*100)/100;
-    angular.element(document.getElementById('total-factura')).html(total);
-    angular.element(document.getElementById('factura-IVA')).html(ivaAplicado);
-    angular.element(document.getElementById('total-factura-IVA')).html(totalIVA);
+    angular.element(document.getElementById('total-factura')).html(total + "€");
+    angular.element(document.getElementById('factura-IVA')).html(ivaAplicado + "€");
+    angular.element(document.getElementById('total-factura-IVA')).html(totalIVA + "€");
   }
-          
 
- // Triggered on a button click, or some other target
 $scope.showPopup = function() {
    $scope.factura.materiales[$scope.lineas+'a']  = {nombre:"",
     cantidad:"",

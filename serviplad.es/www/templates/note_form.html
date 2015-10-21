@@ -1,0 +1,72 @@
+<ion-view title="Nueva Nota">
+  <ion-nav-buttons side="left">
+  <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
+</ion-nav-buttons>
+<ion-nav-buttons side="right">
+  <button side="right" class="button button-icon ion-checkmark-round"  ng-hide="!isOk()" ng-click="saveAndUpdate()"></button>
+</ion-nav-buttons>
+
+<ion-content class="has-header">
+<form id="billForm" name="$parent.billForm" class="billForm" novalidate>
+  <div class="list">
+
+    <!-- DIRECCION -->
+    <label class="item item-input-inset">
+      <input type="text" name="direccion" ng-model="nota.direccion" ng-minlength="4" required placeholder="Dirección">
+    </label>
+    <div class="item errors" ng-show="billForm.direccion.$dirty && billForm.direccion.$invalid">
+      <p ng-show="billForm.direccion.$error.required">Dirección requerida</p>
+      <p ng-show="billForm.direccion.$error.minlength">La dirección tiene que tener más letras</p>
+    </div>
+
+    <!-- CIUDAD -->
+    <ion-select  dataselect="tipoCiudad" label-field="nombre" provider="ciudades" name="ciudad" ng-model="nota.ciudad"></ion-select>
+    <div class="item errors" ng-show="billForm.ciudad.$dirty && billForm.ciudad.$invalid">
+      <p ng-show="billForm.ciudad.$error.required">Ciudad requerida</p>
+      <p ng-show="billForm.ciudad.$error.minlength">La ciuidad tiene que tener más letras</p>
+    </div>
+
+    <!-- PROVINCIA -->
+    <ion-select  dataselect="tipoProvincia" label-field="nombre" provider="provincias" required name="provincia"  ng-model="nota.provincia"></ion-select>
+    <div class="item errors" ng-show="billForm.provincia.$dirty && billForm.provincia.$invalid">
+      <p ng-show="billForm.provincia.$error.required">Provincia requerida</p>
+      <p ng-show="billForm.provincia.$error.minlength">La provincia tiene que tener más letras</p>
+    </div>
+
+
+    <!-- CLIENTE-->
+    <ion-select  dataselect="tipoCliente" label-field="nombre" provider="clientes" required name="cliente" ng-model="nota.cliente"></ion-select>
+    <div class="item errors" ng-show="billForm.cliente.$dirty && billForm.cliente.$invalid">
+      <p ng-show="billForm.cliente.$error.required">Cliente requerido</p>
+    </div>
+
+    <!-- CONTACTO -->
+    <ion-select  dataselect="tipoContacto" label-field="nombre" provider="contactos" name="contacto" ng-model="nota.contacto"></ion-select>
+
+    <!-- LINEAS FACTURA -->
+    <div class="item item-button-right linea_factura">
+      HORAS<a class="button button-icon icon ion-plus-round icon_green" ng-click="showPopup()"></a>
+    </div>
+
+    <div id="lineas-factura"></div>
+    <label class="item item-input-inset">
+      <span class="input-label">BASE IMPONIBLE</span><!-- nexus/google calle, provincia-->
+      <span class="input-label" id="total-factura">0 €</span><!-- nexus/google calle, provincia-->
+    </label>
+
+    <label class="item item-input-inset">
+      <span class="input-label"><strike>IVA</strike></span><!-- nexus/google calle, provincia-->
+    </label>
+    <label class="item item-input-inset">
+      <span class="input-label">TOTAL CON IVA</span><!-- nexus/google calle, provincia-->
+      <span class="input-label" id="total-factura-IVA">0 €</span><!-- nexus/google calle, provincia-->
+    </label>
+
+
+    <label class="item item-input-inset">
+      <input type="text" name="summary" ng-model="factura.summary" placeholder="Detalles">
+    </label>
+
+  </form>
+</ion-content>
+</ion-view>

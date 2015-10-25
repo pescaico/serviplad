@@ -121,6 +121,34 @@ angular.module('starter', ['ionic', 'starter.controllers'])
         }
       }
     })
+    .state('app.nuevaNota', {
+      url: "/nuevaNota/",
+      views: {
+        'menuContent' :{
+          templateUrl: "templates/note_form.html",
+          controller: 'NuevaNotaCtrl'
+        }
+      }
+    })
+    .state('app.nuevoPresupuesto', {
+      url: "/nuevoPresupuesto/",
+      views: {
+        'menuContent' :{
+          templateUrl: "templates/budget_form.html",
+          controller: 'NuevoPresupuestoCtrl'
+        }
+      }
+    })
+    .state('app.inicio', {
+      url: "/inicio/",
+      views: {
+        'menuContent' :{
+          templateUrl: "templates/init.html",
+          controller: 'InicioCtrl'
+        }
+      }
+    })
+
     .state('app.nuevaCliente', {
       url: "/nuevaCliente/",
       views: {
@@ -131,5 +159,5 @@ angular.module('starter', ['ionic', 'starter.controllers'])
       }
     });
   // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('/app/playlists');
+  $urlRouterProvider.otherwise('/app/inicio/');
 });

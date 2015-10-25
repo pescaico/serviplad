@@ -1,5 +1,5 @@
 angular.module('starter.controllers')
-.controller('NuevoClienteCtrl', function($scope, ContactosService, $state, mySharedService, $stateParams, $http) {
+.controller('NuevoClienteCtrl', function($scope, ContactosService, $state, facturaShared, $stateParams, $http) {
 
 
   $scope.isOk = function() {
@@ -8,12 +8,12 @@ angular.module('starter.controllers')
 
   $scope.saveAndGoBack = function() {
     //$window.history.back();
-    if ( mySharedService.type == "cliente") {
-      mySharedService.message.cliente = $scope.cliente;
+    if ( facturaShared.type == "cliente") {
+      facturaShared.message.cliente = $scope.cliente;
     } else {
-      mySharedService.message.contacto = $scope.cliente;
+      facturaShared.message.contacto = $scope.cliente;
     }
-    mySharedService.prepForBroadcast(mySharedService.message,"");
+    facturaShared.prepForBroadcast(facturaShared.message,"");
     $state.go('app.nuevaFactura');
 
   }
@@ -25,16 +25,16 @@ angular.module('starter.controllers')
 $scope.$on('handleBroadcast', function() {
         console.log('CARGA MÁS FACTURAS!');
 
-       //alert(mySharedService.message.provincia);
-          if ( mySharedService.type == "cliente") {
-             $scope.cliente = mySharedService.message.cliente;
+       //alert(facturaShared.message.provincia);
+          if ( facturaShared.type == "cliente") {
+             $scope.cliente = facturaShared.message.cliente;
     } else {
-      $scope.cliente = mySharedService.message.contacto;
+      $scope.cliente = facturaShared.message.contacto;
     }
     });
 
 
-  //alert(mySharedService.message.provincia);
+  //alert(facturaShared.message.provincia);
   $scope.cliente = {
     nombre : "a",
     primerapellido : "",
@@ -51,7 +51,7 @@ $scope.$on('handleBroadcast', function() {
 
   };
 
-$scope.cliente = mySharedService.message.cliente;
+$scope.cliente = facturaShared.message.cliente;
   $scope.submit = function() {
     $scope.cliente.submissions++;
     $scope.cliente.summary = angular.copy($scope.cliente.nombre) ;

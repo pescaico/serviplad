@@ -10,6 +10,12 @@
 <form id="billForm" name="$parent.billForm" class="billForm" novalidate>
   <div class="list">
 
+  <!-- CLIENTE-->
+    <ion-select  dataselect="tipoCliente" label-field="nombreCompleto" provider="clientes" required name="cliente" ng-model="factura.cliente"></ion-select>
+    <div class="item errors" ng-show="billForm.cliente.$dirty && billForm.cliente.$invalid">
+      <p ng-show="billForm.cliente.$error.required">Cliente requerido</p>
+    </div>
+
     <!-- DIRECCION -->
     <label class="item item-input-inset">
       <input type="text" name="direccion" ng-model="factura.direccion" ng-minlength="4" required placeholder="Dirección">
@@ -34,14 +40,7 @@
     </div>
 
 
-    <!-- CLIENTE-->
-    <ion-select  dataselect="tipoCliente" label-field="nombre" provider="clientes" required name="cliente" ng-model="factura.cliente"></ion-select>
-    <div class="item errors" ng-show="billForm.cliente.$dirty && billForm.cliente.$invalid">
-      <p ng-show="billForm.cliente.$error.required">Cliente requerido</p>
-    </div>
-
-    <!-- CONTACTO -->
-    <ion-select  dataselect="tipoContacto" label-field="nombre" provider="contactos" name="contacto" ng-model="factura.contacto"></ion-select>
+    
 
     <!-- LINEAS FACTURA -->
     <div class="item item-button-right linea_factura">

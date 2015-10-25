@@ -14,7 +14,7 @@
   <label class="item item-input-inset">
       <span class="input-label">Empresa:</span>
      <label class="toggle toggle-balanced">
-       <input type="checkbox" name="empresa" ng-model="cliente.empresa" ng-model="cliente.primerapellido"> 
+       <input type="checkbox" name="empresa" ng-model="cliente.empresa" ng-model="cliente.primerapellido">
        <div class="track">
          <div class="handle"></div>
        </div>
@@ -66,17 +66,17 @@
     <p ng-show="clientForm.provincia.$error.minlength">La provincia tiene que tener más letras</p>
   </div>
 
-<!-- DNI --> 
+<!-- DNI -->
 <label class="item item-input-inset">
 <input type="text" name="dnicif" ng-model="cliente.dnicif" ng-pattern="/((^[A-Z]{1}[0-9]{7}[A-Z0-9]{1}$|^[T]{1}[A-Z0-9]{8}$)|^[0-9]{8}[A-Z]{1}$)/" required placeholder="CIF/NIF">
-  
+
 
 </label>
 <div class="item errors" ng-show="clientForm.dnicif.$dirty && clientForm.dnicif.$invalid">
    <p ng-show="clientForm.dnicif.$error.$invalid">El CIF/NIF/NIE  ESTÁ MAL.</p>
    <p ng-show="clientForm.dnicif.$error.required">DNI/NIF/NIE requerido</p>
    <p ng-show="clientForm.dnicif.$error.pattern">DNI/NIF/NIE con mal formato</p>
-  
+
 </div>
 
 <!--TELEFONO-->
@@ -88,7 +88,7 @@
    <p ng-show="clientForm.telefono.$error.required">Telefono requerido</p>
 </div>
 
-<!-- FAX -->   
+<!-- FAX -->
 <label class="item item-input-inset">
   <input type="tel" name="fax" ng-model="cliente.fax" ng-pattern="/^\+?(9[976]\d|8[987530]\d|6[987]\d|5[90]\d|42\d|3[875]\d|2[98654321]\d|9[8543210]|8[6421]|6[6543210]|5[87654321]|4[987654310]|3[9643210]|2[70]|7|1)\d{1,14}$/" placeholder="FAX">
 </label>
@@ -97,7 +97,7 @@
 </div>
 
 
-<!-- EMAIL --> 
+<!-- EMAIL -->
 <label class="item item-input-inset">
   <input type="email" name="uEmail" ng-model="cliente.email">
 </label>

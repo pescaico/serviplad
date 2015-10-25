@@ -1,6 +1,6 @@
 angular.module('starter.controllers')
 
-.controller('NuevaNotaCtrl', function($scope, $rootScope,  DataService, mySharedService, $stateParams, $ionicPopup, $timeout, $http, $compile, $state) {
+.controller('NuevaNotaCtrl', function($scope, $rootScope,  DataService, $stateParams, $ionicPopup, $timeout, $http, $compile, $state) {
   //$scope.contacto = NotasService.get($stateParams.notaId);
   $scope.title = "Nueva Nota";
   //$scope.focusManager = { focusInputOnBlur: true};
@@ -18,7 +18,7 @@ angular.module('starter.controllers')
 
   $scope.lineas = 0;
   $scope.numLineas = 0;
-  $scope.nota = mySharedService.message;
+
 
 
   $scope.isOk = function() {
@@ -35,17 +35,10 @@ angular.module('starter.controllers')
   };
 
   $scope.goNewClienteForm = function() {
-    mySharedService.prepForBroadcast($scope.nota,"cliente");
-    $state.go('app.nuevoCliente');
-  };
-
-  $scope.goNewContactoForm = function() {
-    mySharedService.prepForBroadcast($scope.nota, "contacto");
     $state.go('app.nuevoCliente');
   };
 
   $scope.$on('handleBroadcast', function() {
-    $scope.nota = mySharedService.message;
   });
 
   $scope.removeLinea = function(linea) {

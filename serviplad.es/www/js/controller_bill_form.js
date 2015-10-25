@@ -1,6 +1,6 @@
 angular.module('starter.controllers')
 
-.controller('NuevaFacturaCtrl', function($scope, $rootScope, DataService, mySharedService, facturaShared, $stateParams, $ionicPopup, $timeout, $http, $compile, $state) {
+.controller('NuevaFacturaCtrl', function($scope, $rootScope, DataService, facturaShared, $stateParams, $ionicPopup, $timeout, $http, $compile, $state) {
     //$scope.contacto = FacturasService.get($stateParams.facturaId);
     $scope.title = "Nueva Factura";
     //$scope.focusManager = { focusInputOnBlur: true};
@@ -18,13 +18,7 @@ angular.module('starter.controllers')
         name: 'cliente',
         type: 'text'
     };
-    $scope.tipoContacto = {
-        placeholder: 'Contacto',
-        required: false,
-        ngMinLength: 4,
-        name: 'contacto',
-        type: 'text'
-    };
+
     $scope.tipoCiudad = {
         placeholder: 'Ciudad',
         required: true,
@@ -43,6 +37,47 @@ angular.module('starter.controllers')
     $scope.lineas = 0;
     $scope.numLineas = 0;
 
+ $scope.setPastaTotal = function() {
+        var IVA = 0.21;
+        var total = 0;
+        var totalIVA = 0;
+        var ivaAplicado = 0;
+        for (entry in $scope.factura.materiales) {
+            var entity = $scope.factura.materiales[entry];
+            total += entity.precio * entity.cantidad;
+        } //);
+        total = Math.round(total * 100) / 100;
+        ivaAplicado = total * IVA;
+        ivaAplicado = Math.round(ivaAplicado * 100) / 100;
+        totalIVA = ivaAplicado + total;
+        totalIVA = Math.round(totalIVA * 100) / 100;
+        angular.element(document.getElementById('total-factura')).html(total + "€");
+        angular.element(document.getElementById('factura-IVA')).html(ivaAplicado + "€");
+        angular.element(document.getElementById('total-factura-IVA')).html(totalIVA + "€");
+    };
+
+$scope.pintaLinea = function(key) {
+        var IVA = 0.21;
+        var nombre = $scope.factura.materiales[key].nombre;
+                        var cantidad = $scope.factura.materiales[key].cantidad;
+                        var precioUnidadSinIVA = $scope.factura.materiales[key].precio;
+                        var precioUnidadesSinIVA = precioUnidadSinIVA * cantidad;
+                        precioUnidadesSinIVA = Math.round(precioUnidadesSinIVA * 100) / 100;
+                        var precioUnidadConIVA = precioUnidadSinIVA * IVA + precioUnidadSinIVA;
+                        precioUnidadConIVA = Math.round(precioUnidadConIVA * 100) / 100;
+                        var precioUnidadesConIVA = precioUnidadesSinIVA * IVA + precioUnidadesSinIVA;
+                        precioUnidadesConIVA = Math.round(precioUnidadesConIVA * 100) / 100;
+
+                        var linea = nombre + ": " + cantidad + " uds a " + precioUnidadSinIVA + " €(" + precioUnidadConIVA + "€). Total: " + (precioUnidadesSinIVA) + "€ (con IVA: " + precioUnidadesConIVA + "€)";
+        angular.element(document.getElementById('lineas-factura')).append($compile(
+            "<div class='item item-button-right linea_factura'  id='lineas-factura" + $scope.lineas + "'>" + linea + "<a remove-on-click-client ng-click='removeLinea(\"" + key + "\", \"" + $scope.numLineas+ "\")'  id='button-remove-factura" + $scope.lineas + "' " +
+            " class='button button-icon icon ion-close-round icon_red'></a>" + "</div>")($scope)); 
+        $scope.lineas++;
+        $scope.numLineas++;
+        $scope.setPastaTotal();
+    };
+
+
     if (Object.keys(facturaShared.message).length == 0) {
         $scope.factura = {
             fecha: new Date(),
@@ -50,12 +85,15 @@ angular.module('starter.controllers')
             provincia: "",
             ciudad: "",
             cliente: null,
-            contacto: null,
             summary: "",
             materiales: []
         };
     } else {
         $scope.factura = facturaShared.message;
+        Object.keys($scope.factura.materiales).forEach(function(key) {
+            console.log(key, $scope.factura.materiales[key]);
+            $scope.pintaLinea(key);
+        });
     }
 
 
@@ -94,43 +132,20 @@ angular.module('starter.controllers')
         $state.go('app.nuevoCliente');
     };
 
-    $scope.goNewContactoForm = function() {
-        mySharedService.prepForBroadcast($scope.contacto, "contacto");
-        $state.go('app.nuevoCliente');
-    };
-
     $scope.$on('handleBroadcast', function() {
         if (Object.keys(facturaShared.message).length != 0) {
             $scope.billForm = facturaShared.message;
         }
     });
 
-    $scope.removeLinea = function(linea) {
+    $scope.removeLinea = function(linea, idDiv) {
         delete $scope.factura.materiales[linea];
+        angular.element(document.getElementById('button-remove-factura'+idDiv)).parent().remove();
         $scope.numLineas--;
+
 
         $scope.setPastaTotal();
     };
-
-    $scope.setPastaTotal = function() {
-        var IVA = 0.21;
-        var total = 0;
-        var totalIVA = 0;
-        var ivaAplicado = 0;
-        //$scope.factura.materiales.forEach(function(entry) {
-        for (entry in $scope.factura.materiales) {
-            var entity = $scope.factura.materiales[entry];
-            total += entity.precio * entity.cantidad;
-        } //);
-        total = Math.round(total * 100) / 100;
-        ivaAplicado = total * IVA;
-        ivaAplicado = Math.round(ivaAplicado * 100) / 100;
-        totalIVA = ivaAplicado + total;
-        totalIVA = Math.round(totalIVA * 100) / 100;
-        angular.element(document.getElementById('total-factura')).html(total + "€");
-        angular.element(document.getElementById('factura-IVA')).html(ivaAplicado + "€");
-        angular.element(document.getElementById('total-factura-IVA')).html(totalIVA + "€");
-    }
 
     $scope.showPopup = function() {
         $scope.factura.materiales[$scope.lineas + 'a'] = {
@@ -168,25 +183,7 @@ angular.module('starter.controllers')
                         e.preventDefault();
                     } else {
                         var key = $scope.lineas + "a";
-                        var IVA = 0.21;
-                        var nombre = $scope.factura.materiales[key].nombre;
-                        var cantidad = $scope.factura.materiales[key].cantidad;
-                        var precioUnidadSinIVA = $scope.factura.materiales[key].precio;
-                        var precioUnidadesSinIVA = precioUnidadSinIVA * cantidad;
-                        precioUnidadesSinIVA = Math.round(precioUnidadesSinIVA * 100) / 100;
-                        var precioUnidadConIVA = precioUnidadSinIVA * IVA + precioUnidadSinIVA;
-                        precioUnidadConIVA = Math.round(precioUnidadConIVA * 100) / 100;
-                        var precioUnidadesConIVA = precioUnidadesSinIVA * IVA + precioUnidadesSinIVA;
-                        precioUnidadesConIVA = Math.round(precioUnidadesConIVA * 100) / 100;
-
-                        var linea = nombre + ": " + cantidad + " uds a " + precioUnidadSinIVA + " €(" + precioUnidadConIVA + "€). Total: " + (precioUnidadesSinIVA) + "€ (con IVA: " + precioUnidadesConIVA + "€)";
-                        angular.element(document.getElementById('lineas-factura')).append(
-                            $compile(
-                                "<div class='item item-button-right linea_factura'  id='lineas-factura" + $scope.lineas + "'>" + linea + "<a remove-on-click-client ng-click='removeLinea(\"" + key + "\")'  id='button-remove-factura" + $scope.lineas + "' " +
-                                " class='button button-icon icon ion-close-round icon_red'></a>" + "</div>")($scope));
-                        $scope.lineas++;
-                        $scope.numLineas++;
-                        $scope.setPastaTotal();
+                        $scope.pintaLinea(key);
                         return $scope.factura.materiales;
 
                     }

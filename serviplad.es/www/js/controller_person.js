@@ -2,7 +2,7 @@ angular.module('starter.controllers')
 .controller('NuevoClienteCtrl', function($scope, ContactosService, $state, mySharedService, $stateParams, $http) {
 
 
-  $scope.isOk = function() {    
+  $scope.isOk = function() {
     return $scope.clientForm.$valid;
   }
 
@@ -13,9 +13,8 @@ angular.module('starter.controllers')
     } else {
       mySharedService.message.contacto = $scope.cliente;
     }
-
     mySharedService.prepForBroadcast(mySharedService.message,"");
-    $state.go('app.nuevaFactura'); 
+    $state.go('app.nuevaFactura');
 
   }
 
@@ -26,9 +25,9 @@ angular.module('starter.controllers')
 $scope.$on('handleBroadcast', function() {
         console.log('CARGA MÁS FACTURAS!');
 
-        //alert(mySharedService.message.provincia);
+       //alert(mySharedService.message.provincia);
           if ( mySharedService.type == "cliente") {
-             $scope.cliente = mySharedService.message.cliente ;
+             $scope.cliente = mySharedService.message.cliente;
     } else {
       $scope.cliente = mySharedService.message.contacto;
     }
@@ -51,6 +50,7 @@ $scope.$on('handleBroadcast', function() {
     summary:""
 
   };
+
 $scope.cliente = mySharedService.message.cliente;
   $scope.submit = function() {
     $scope.cliente.submissions++;
@@ -58,7 +58,7 @@ $scope.cliente = mySharedService.message.cliente;
   }
 
 })
-//FACTORIAS 
+//FACTORIAS
 .factory('ContactosService', function($q, $timeout) {
   var contactos = [
   { nombre: 'Paco', apellidos:'Pérez Galdós', id: 1 },
@@ -79,7 +79,7 @@ $scope.cliente = mySharedService.message.cliente;
     },
     allSync : function() {
       return contactos;
-    },  
+    },
     get: function(contactoId) {
       // Simple index lookup
       for(var i=0, l=contactos.length; i < l; i++) {

@@ -140,32 +140,4 @@ $scope.showPopup = function() {
       ]
     });
 };
-})
-.factory('DataService', function() {
-  var listsData =
-  {provincias:[
-    {nombre:'Alicante', id:1},
-    {nombre:'Albacete', id:2},
-    {nombre:'Madrid', id:14}
-    ],
-    ciudades:[
-    {nombre:'Villena', id:2},
-    {nombre:'Caudete', id:4},
-    {nombre:'Tres Cantos', id:88}
-    ],
-    clientes:[
-    {nombre: 'Juan', apellidos:' TH E ', id:1},
-    {nombre: 'Josh', apellidos:'E H E ', id:2},
-    {nombre: 'Juma', apellidos:'ER H E ', id:3},
-    {nombre: 'Anto', apellidos:'A H E ', id:4}
-    ],
-    contactos:[
-    {nombre: 'Paco', apellidos:' cholo ', id:1},
-    {nombre: 'Pepe', apellidos:'niono', id:2},
-    {nombre: 'Pana', apellidos:'bobo ', id:3},
-    {nombre: 'Pere', apellidos:'hgo ', id:4}]
-  }
- return {
-  getList: function() { return listsData}
-  };
 });

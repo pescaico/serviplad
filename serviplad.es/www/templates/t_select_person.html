@@ -1,21 +1,21 @@
-<div class="selectContainer"> 
-  <label class="item item-input-inset"> 
+<div class="selectContainer">
+  <label class="item item-input-inset">
     <i class="icon ion-person placeholder-icon"></i> 
-    <input label-field="{{labelField}}" 
-    type="search" 
-    ng-model="ngModel" 
-    ng-value="ngValue" 
-    ng-keydown="onKeyDown()" 
-    placeholder="{{dataselect.placeholder}}" 
+    <input label-field="{{labelField}}"
+    type="search"
+    ng-model="ngModel"
+    ng-value="ngValue"
+    ng-keydown="onKeyDown()"
+    placeholder="{{dataselect.placeholder}}"
     ng-required="{{dataselect.required}}">
     <label class="button button-icon icon ion-chevron-down" ng-click="open()" ></label>
     <label class="button button-icon icon ion-person-add icon_green" ng-click="goNewPerson()" ></label>
-  </label>  
-  <div class="optionList padding-left padding-right" ng-show="showHide"> 
-    <ion-scroll> 
-      <ul class="list"> 
-        <li class="item list_options" ng-click="selecionar(item)" ng-repeat="item in provider | dynamicFilter:[labelField,ngModel]">{{item[labelField]}}</li> 
-      </ul> 
-    </ion-scroll> 
-  </div> 
+  </label>
+  <div class="optionList padding-left padding-right" ng-show="showHide">
+    <ion-scroll>
+      <ul class="list">
+        <li class="item list_options" ng-click="selecionar(item)" ng-repeat="item in provider | dynamicFilter:[labelField,ngModel]">{{item[labelField]}}</li>
+      </ul>
+    </ion-scroll>
+  </div>
 </div>

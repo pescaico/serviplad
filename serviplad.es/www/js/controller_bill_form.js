@@ -104,11 +104,13 @@ $scope.pintaLinea = function(key) {
 
     $scope.saveAndUpdate = function() {
         alert('go to save');
+        myTest();
     }
 
     $scope.submit = function() {
-        $scope.factura.submissions++;
-        $scope.factura.summary = angular.copy($scope.factura.nombre);
+        
+        //$scope.factura.submissions++;
+        //$scope.factura.summary = angular.copy($scope.factura.nombre);
     };
 
     $scope.goNewClienteForm = function() {

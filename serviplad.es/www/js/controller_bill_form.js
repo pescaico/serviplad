@@ -1,6 +1,6 @@
 angular.module('starter.controllers')
 
-.controller('NuevaFacturaCtrl', function($scope, $rootScope,  DataService, mySharedService, $stateParams, $ionicPopup, $timeout, $http, $compile, $state) {
+.controller('NuevaFacturaCtrl', function($scope, $rootScope,  DataService, mySharedService, facturaShared, $stateParams, $ionicPopup, $timeout, $http, $compile, $state) {
   //$scope.contacto = FacturasService.get($stateParams.facturaId);
   $scope.title = "Nueva Factura";
   //$scope.focusManager = { focusInputOnBlur: true};
@@ -18,10 +18,25 @@ angular.module('starter.controllers')
 
   $scope.lineas = 0;
   $scope.numLineas = 0;
-  $scope.factura = mySharedService.message;
+
+  if(Object.keys(facturaShared.message).length == 0) {
+    $scope.factura = {
+      fecha : new Date(),
+      direccion : "",
+      provincia: "",
+      ciudad: "",
+      cliente: null,
+      contacto: null,
+      summary:"",
+      materiales: []
+    };
+  } else {
+    $scope.factura = facturaShared.message;
+  }
 
 
-  $scope.isOk = function() {    
+
+  $scope.isOk = function() {
     return $scope.billForm.$valid;
   }
 
@@ -35,17 +50,30 @@ angular.module('starter.controllers')
   };
 
   $scope.goNewClienteForm = function() {
-    mySharedService.prepForBroadcast($scope.factura,"cliente");
-    $state.go('app.nuevoCliente'); 
+    $scope.factura.cliente.toString = function clienteToString() {
+      return $scope.factura.cliente.nombre +" (" +$scope.factura.cliente.dnicif +") " ;
+    };
+
+    $scope.factura.provincia.toString = function provinciaToString() {
+      return $scope.factura.provincia.nombre;
+    };
+
+    $scope.factura.ciudad.toString = function ciudadToString() {
+      return $scope.factura.ciudad.nombre;
+    };
+    facturaShared.prepForBroadcast($scope.factura,"factura");
+    $state.go('app.nuevoCliente');
   };
 
   $scope.goNewContactoForm = function() {
-    mySharedService.prepForBroadcast($scope.factura, "contacto");
-    $state.go('app.nuevoCliente'); 
+    mySharedService.prepForBroadcast($scope.contacto, "contacto");
+    $state.go('app.nuevoCliente');
   };
 
   $scope.$on('handleBroadcast', function() {
-    $scope.factura = mySharedService.message;
+    if(Object.keys(facturaShared.message).length != 0) {
+      $scope.billForm = facturaShared.message;
+    }
   });
 
   $scope.removeLinea = function(linea) {
@@ -110,7 +138,7 @@ $scope.showPopup = function() {
            } else {
             var key = $scope.lineas+"a";
             var IVA = 0.21;
-            var nombre = $scope.factura.materiales[key].nombre; 
+            var nombre = $scope.factura.materiales[key].nombre;
             var cantidad = $scope.factura.materiales[key].cantidad;
             var precioUnidadSinIVA= $scope.factura.materiales[key].precio;
             var precioUnidadesSinIVA= precioUnidadSinIVA * cantidad;
@@ -119,7 +147,7 @@ $scope.showPopup = function() {
             precioUnidadConIVA = Math.round(precioUnidadConIVA*100)/100;
             var precioUnidadesConIVA= precioUnidadesSinIVA*IVA +precioUnidadesSinIVA;
             precioUnidadesConIVA = Math.round(precioUnidadesConIVA*100)/100;
-            
+
             var linea = nombre + ": " +   cantidad + " uds a " + precioUnidadSinIVA + " €("+precioUnidadConIVA
               +"€). Total: "+ (precioUnidadesSinIVA) +"€ (con IVA: "+ precioUnidadesConIVA+"€)";
             angular.element(document.getElementById('lineas-factura')).append(
@@ -128,7 +156,7 @@ $scope.showPopup = function() {
                 + linea
                 + "<a remove-on-click-client ng-click='removeLinea(\""+key+"\")'  id='button-remove-factura"+$scope.lineas+"' "+
                 " class='button button-icon icon ion-close-round icon_red'></a>"
-                +"</div>")($scope));  
+                +"</div>")($scope));
             $scope.lineas++;
             $scope.numLineas++;
             $scope.setPastaTotal();
@@ -142,7 +170,7 @@ $scope.showPopup = function() {
 };
 })
 .factory('DataService', function() {
-  var listsData = 
+  var listsData =
   {provincias:[
     {nombre:'Alicante', id:1},
     {nombre:'Albacete', id:2},
@@ -166,7 +194,6 @@ $scope.showPopup = function() {
     {nombre: 'Pere', apellidos:'hgo ', id:4}]
   }
  return {
-  getList: function() { return listsData} 
+  getList: function() { return listsData}
   };
 });
- 

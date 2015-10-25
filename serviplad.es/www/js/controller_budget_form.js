@@ -1,6 +1,6 @@
 angular.module('starter.controllers')
 
-.controller('NuevoPresupuestoCtrl', function($scope, $rootScope,  DataService, mySharedService, $stateParams, $ionicPopup, $timeout, $http, $compile, $state) {
+.controller('NuevoPresupuestoCtrl', function($scope, $rootScope,  DataService, $stateParams, $ionicPopup, $timeout, $http, $compile, $state) {
   //$scope.contacto = PresupuestosService.get($stateParams.presupuestoId);
   $scope.title = "Nuevo Presupuesto";
   //$scope.focusManager = { focusInputOnBlur: true};
@@ -18,7 +18,6 @@ angular.module('starter.controllers')
 
   $scope.lineas = 0;
   $scope.numLineas = 0;
-  $scope.presupuesto = mySharedService.message;
 
 
   $scope.isOk = function() {
@@ -35,17 +34,14 @@ angular.module('starter.controllers')
   };
 
   $scope.goNewClienteForm = function() {
-    mySharedService.prepForBroadcast($scope.presupuesto,"cliente");
     $state.go('app.nuevoCliente');
   };
 
   $scope.goNewContactoForm = function() {
-    mySharedService.prepForBroadcast($scope.presupuesto, "contacto");
     $state.go('app.nuevoCliente');
   };
 
   $scope.$on('handleBroadcast', function() {
-    $scope.presupuesto = mySharedService.message;
   });
 
   $scope.removeLinea = function(linea) {

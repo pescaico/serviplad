@@ -9,15 +9,6 @@
 <ion-content class="has-header">
 <form id="billForm" name="$parent.billForm" class="billForm" novalidate>
   <div class="list">
-    
-    <!-- FECHA  -->
-    <label class="item item-input-inset">
-      <input type="date" placeholder="" name="fecha" ng-model="factura.fecha" min="{{date}}" required value="{{date | date:'dd/MM/yyyy'}}">
-    </label>
-    <div class="item errors" ng-show="billForm.fecha.$dirty && billForm.fecha.$invalid">
-      <p ng-show="billForm.fecha.$error.required">Fecha requerida</p>
-      <p ng-show="billForm.fecha.$invalid">Fecha incorrecta</p>
-    </div>
 
     <!-- DIRECCION -->
     <label class="item item-input-inset">
@@ -42,8 +33,8 @@
       <p ng-show="billForm.provincia.$error.minlength">La provincia tiene que tener más letras</p>
     </div>
 
-    
-    <!-- CLIENTE--> 
+
+    <!-- CLIENTE-->
     <ion-select  dataselect="tipoCliente" label-field="nombre" provider="clientes" required name="cliente" ng-model="factura.cliente"></ion-select>
     <div class="item errors" ng-show="billForm.cliente.$dirty && billForm.cliente.$invalid">
       <p ng-show="billForm.cliente.$error.required">Cliente requerido</p>
@@ -51,12 +42,12 @@
 
     <!-- CONTACTO -->
     <ion-select  dataselect="tipoContacto" label-field="nombre" provider="contactos" name="contacto" ng-model="factura.contacto"></ion-select>
-    
+
     <!-- LINEAS FACTURA -->
     <div class="item item-button-right linea_factura">
       LÍNEAS FACTURA<a class="button button-icon icon ion-plus-round icon_green" ng-click="showPopup()"></a>
     </div>
-    
+
     <div id="lineas-factura"></div>
     <label class="item item-input-inset">
       <span class="input-label">BASE IMPONIBLE</span><!-- nexus/google calle, provincia-->

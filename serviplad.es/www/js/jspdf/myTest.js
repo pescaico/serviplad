@@ -1,4 +1,34 @@
+var dataCliente = [];
 var functionsTest = {};
+
+pdfPresupuesto = function(factura) {
+    var doc = new jsPDF('p', 'pt');
+    
+    var type="PRESUPUESTO";
+    var pdf="";//serviplad_PRESUPUESTO_20151022132011DNI/NIF
+    setDataClientePresupuesto(factura);
+    if(type == "PRESUPUESTO") {
+        generatePdfPresupuesto(doc);
+        pdf="presupuesto.pdf";
+    } else if(type == "NOTA") {
+        generatePdfNota(doc);
+        pdf="nota.pdf";
+    } else if(type == "FACTURA") {
+        generatePdfFactura(doc);
+        pdf="factura.pdf";
+    } 
+
+
+    //SETEAMOS EL FOOTER (// Total page number plugin only available in jspdf v1.0+)
+    var totalPagesExp = "{total_pages_count_string}";    
+    if (typeof doc.putTotalPages === 'function') {
+        doc.putTotalPages(totalPagesExp);
+    }    
+
+    //guardamos
+    doc.save("myTest.pdf");
+    return doc;
+};
 
 // Default - shows what a default table looks like
 myTest = function () {
@@ -7,14 +37,14 @@ myTest = function () {
     var type="PRESUPUESTO";
     var pdf="";//serviplad_PRESUPUESTO_20151022132011DNI/NIF
     if(type == "PRESUPUESTO") {
-		generatePdfPresupuesto(doc);
-		pdf="presupuesto.pdf";
+        generatePdfPresupuesto(doc);
+        pdf="presupuesto.pdf";
     } else if(type == "NOTA") {
-		generatePdfNota(doc);
-		pdf="nota.pdf";
+        generatePdfNota(doc);
+        pdf="nota.pdf";
     } else if(type == "FACTURA") {
-    	generatePdfFactura(doc);
-    	pdf="factura.pdf";
+        generatePdfFactura(doc);
+        pdf="factura.pdf";
     } 
 
     //SETEAMOS EL FOOTER (// Total page number plugin only available in jspdf v1.0+)
@@ -43,7 +73,7 @@ var getColsPresupuesto = function () {
 
 // Aquí se debe de obtener la info desde el formulario
 function getDataPresupuesto(rowCount) {
-	rowCount = 10;
+    rowCount = 10;
     var data = [];
 
     /*data.push({
@@ -97,13 +127,41 @@ var getColsClientePresupuesto = function () {
 };
 
 
+function setDataClientePresupuesto(factura) {
+    dataCliente = [];
+    var nombre, apellidos, cifNif, tlf, direccion, ciudad, provincia;
+    
+    direccion = factura.direccion;
+    tlf = factura.cliente.telefono;
+    cifNif = factura.cliente.dnicif;
+    nombre  = factura.cliente.nombre;
+    
+    if(typeof factura.provincia.nombre === 'undefined'){
+        provincia = factura.provincia;
+    } else {
+        provincia = factura.provincia.nombre;
+    }
+    if(typeof factura.ciudad.nombre === 'undefined'){
+        ciudad = factura.ciudad;
+    }
+    else {
+        ciudad = factura.ciudad.nombre;
+    }
+
+    dataCliente.push({key: "NOMBRE: ", value: nombre + " " + apellidos});
+    dataCliente.push({key: "CIF/NIF: ", value: cifNif});
+    dataCliente.push({key: "TELÉFONO: ", value: tlf});
+    dataCliente.push({key: "DIRECCIÓN: ", value: direccion + ", " + ciudad + "(" + provincia + ")"});
+    return dataCliente;
+};
+
 function getDataClientePresupuesto() {
-    var data = [];
-        data.push({key: "NOMBRE: ", value: "valor"});
-        data.push({key: "CIF/NIF: ", value: "9873652E"});
-        data.push({key: "TELÉFONO: ", value: "valor"});
-        data.push({key: "DIRECCIÓN: ", value: "C/la más larga a asdfasdfasdfasdfasdf asdf asdf asdf asdf asfasdfasdfasdfasdfasdfasdfasdfasdf awdfasdf ver si se puede hacer split"});
-    return data;
+    /*var dataCliente = [];
+        dataCliente.push({key: "NOMBRE: ", value: "valor"});
+        dataCliente.push({key: "CIF/NIF: ", value: "9873652E"});
+        dataCliente.push({key: "TELÉFONO: ", value: "valor"});
+        dataCliente.push({key: "DIRECCIÓN: ", value: "C/la más larga a asdfasdfasdfasdfasdf asdf asdf asdf asdf asfasdfasdfasdfasdfasdfasdfasdfasdf awdfasdf ver si se puede hacer split"});*/
+    return dataCliente;
 }
 
 
@@ -112,7 +170,7 @@ function generatePdfFactura(doc) {
 };
 
 function generatePdfNota(doc) {
-	//doc.autoTable(getColsNota, getDataNot(40));
+    //doc.autoTable(getColsNota, getDataNot(40));
 };
 
 
@@ -142,168 +200,168 @@ function getDataServicioARealizar() {
 
 
 function generatePdfPresupuesto(doc) {
-	//generamos tabla cliente
-	
-	doc.setFontSize(10);
-	doc.setFontStyle('normal');
-	doc.setFont("Helvetica","");
-	doc.text("SERVICIOS PLADUR, C.B.", 40, 70);
-	doc.text("Jose Hernández Estevan", 40, 83);
-	doc.text("Pablo Navarro Navarro", 40, 96);
-	doc.text("cif: E-54714720", 40, 116);
-	doc.text("TELF: 626 705 792 / 679 398 496", 40, 129);
-	doc.text("DIRECCIÓN: 03400 Villena (Alicante)", 40, 142);
-
-	doc.addImage(serviPladLogo, 'JPEG', 300, 60, 250, 50);
+    //DATOS CLIENTE
+    doc.setFontSize(10);
+    doc.setFontStyle('normal');
+    doc.setFont("Helvetica","");
+    doc.text("SERVICIOS PLADUR, C.B.", 40, 70);
+    doc.text("Jose Hernández Estevan", 40, 83);
+    doc.text("Pablo Navarro Navarro", 40, 96);
+    doc.text("cif: E-54714720", 40, 116);
+    doc.text("TELF: 626 705 792 / 679 398 496", 40, 129);
+    doc.text("DIRECCIÓN: 03400 Villena (Alicante)", 40, 142);
+    doc.addImage(serviPladLogo, 'JPEG', 300, 60, 250, 50);
 
 
-var meses = new Array ("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
-var f=new Date();
-	doc.text("Fecha:" + f.getDate() + " de " + meses[f.getMonth()] + " de " + f.getFullYear(), 400, 200);
-
-	doc.setTextColor(100);
-	doc.setFontSize(16);
-	doc.setFontStyle('bold');
-	doc.setFontStyle('normal');
-	doc.text("PRESUPUESTO DE SERVICIOS DE ESCAYOLA Y PLADUR.", 75,240);
+    var meses = new Array ("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
+    var f=new Date();
+        doc.text("ID Factura: SP" + f.getFullYear() + f.getMonth() + f.getDate() + f.getHours() +  f.getMinutes() + f.getSeconds(), 400, 180);
+        doc.text("Fecha: " + f.getDate() + " de " + meses[f.getMonth()] + " de " + f.getFullYear(), 400, 200);
 
 
-doc.autoTable(getColsClientePresupuesto(), getDataClientePresupuesto(), {
-	columnStyles: {
-        id: {fillColor: 0},
-        text: {columnWidth: 'wrap'}
-    },
-    styles: {overflow: 'linebreak'},
-    drawHeaderRow: function() {
+        doc.setTextColor(100);
+        doc.setFontSize(16);
+        doc.setFontStyle('bold');
+        doc.setFontStyle('normal');
+        doc.text("PRESUPUESTO DE SERVICIOS DE ESCAYOLA Y PLADUR.", 75,240);
+
+
+    doc.autoTable(getColsClientePresupuesto(), getDataClientePresupuesto(), {
+        columnStyles: {
+            id: {fillColor: 0},
+            text: {columnWidth: 'wrap'}
+        },
+        styles: {overflow: 'linebreak'},
+        drawHeaderRow: function() {
+                // Don't draw header row
+                return false;
+            },
+
+        theme: 'grid',
+        startY: 250,
+        drawRow: function (row, data) {
+            // Colspan
+            doc.setFontStyle('bold');
+            doc.setFontSize(10);
+            if (row.index === 0) {
+                doc.setTextColor(100);
+                doc.rect(data.settings.margin.left, row.y, data.table.width, 20, 'S');
+                doc.autoTableText("DATOS CLIENTE", data.settings.margin.left + data.table.width / 2, row.y + row.height / 2, {
+                    halign: 'center',
+                    valign: 'middle'
+                });
+                data.cursor.y += 20;
+            }
+            if(row.index > 10) {
+                doc.setTextColor(200, 0, 0);
+            }
+        },
+        createdCell: function (cell, data) {
+            if (data.column.dataKey === 'key') {
+                cell.styles.halign = 'right';
+                cell.styles.textColor = [100, 100, 100];
+            }
+        },
+
+    });
+
+
+    doc.autoTable(getServicioARealizar(),getDataServicioARealizar(), {
+        columnStyles: {
+            id: {fillColor: 0},
+            text: {columnWidth: 'wrap'}
+        },
+        styles: {overflow: 'linebreak'},
+        drawHeaderRow: function() {
             // Don't draw header row
             return false;
         },
-
-	theme: 'grid',
-	startY: 250,
-	drawRow: function (row, data) {
-        // Colspan
-        doc.setFontStyle('bold');
-        doc.setFontSize(10);
-        if (row.index === 0) {
-            doc.setTextColor(100);
-            doc.rect(data.settings.margin.left, row.y, data.table.width, 20, 'S');
-            doc.autoTableText("DATOS CLIENTE", data.settings.margin.left + data.table.width / 2, row.y + row.height / 2, {
-                halign: 'center',
-                valign: 'middle'
-            });
-            data.cursor.y += 20;
-        }
-        if(row.index > 10) {
-        	doc.setTextColor(200, 0, 0);
-        }
-    },
-    createdCell: function (cell, data) {
-        if (data.column.dataKey === 'key') {
-            cell.styles.halign = 'right';
-            cell.styles.textColor = [100, 100, 100];
-        }
-    },
-
-});
-
-
-doc.autoTable(getServicioARealizar(),getDataServicioARealizar(), {
-	columnStyles: {
-        id: {fillColor: 0},
-        text: {columnWidth: 'wrap'}
-    },
-    styles: {overflow: 'linebreak'},
-    drawHeaderRow: function() {
-        // Don't draw header row
-        return false;
-	},
-	drawRow: function (row, data) {
-        // Colspan
-        doc.setFontStyle('bold');
-        doc.setFontSize(10);
-        if (row.index === 0) {
-            doc.setTextColor(100);
-            doc.rect(data.settings.margin.left, row.y, data.table.width, 20, 'S');
-            doc.autoTableText("DESCRIPCIÓN DEL SERVICIO A REALIZAR", data.settings.margin.left + data.table.width / 2, row.y + row.height / 2, {
-                halign: 'center',
-                valign: 'middle'
-            });
-            data.cursor.y += 20;
-        }
-    },
-	theme: 'grid',
-	startY: 385
-});
+        drawRow: function (row, data) {
+            // Colspan
+            doc.setFontStyle('bold');
+            doc.setFontSize(10);
+            if (row.index === 0) {
+                doc.setTextColor(100);
+                doc.rect(data.settings.margin.left, row.y, data.table.width, 20, 'S');
+                doc.autoTableText("DESCRIPCIÓN DEL SERVICIO A REALIZAR", data.settings.margin.left + data.table.width / 2, row.y + row.height / 2, {
+                    halign: 'center',
+                    valign: 'middle'
+                });
+                data.cursor.y += 20;
+            }
+        },
+        theme: 'grid',
+        startY: 385
+    });
 
 
 
-doc.autoTable(getOfertaEconomica(),getDataOfertaEconomica(), {
-	columnStyles: {
-        id: {fillColor: 0},
-        text: {columnWidth: 'wrap'}
-    },
-    styles: {overflow: 'linebreak'},
-    drawHeaderRow: function() {
-        // Don't draw header row
-        return false;
-	},
-	drawRow: function (row, data) {
-	        // Colspan
-	        doc.setFontStyle('bold');
-	        doc.setFontSize(10);
-	        if (row.index === 0) {
-	            doc.setTextColor(100);
-	            doc.setFillColor(200, 0, 0);
-	            doc.rect(data.settings.margin.left, row.y, data.table.width, 20, 'S');
-	            doc.autoTableText("OFERTA ECONÓMICA", data.settings.margin.left + data.table.width / 2, row.y + row.height / 2, {
-	                halign: 'center',
-	                valign: 'middle'
-	            });
-	            data.cursor.y += 20;
-	        }
-	    },
+    doc.autoTable(getOfertaEconomica(),getDataOfertaEconomica(), {
+        columnStyles: {
+            id: {fillColor: 0},
+            text: {columnWidth: 'wrap'}
+        },
+        styles: {overflow: 'linebreak'},
+        drawHeaderRow: function() {
+            // Don't draw header row
+            return false;
+        },
+        drawRow: function (row, data) {
+                // Colspan
+                doc.setFontStyle('bold');
+                doc.setFontSize(10);
+                if (row.index === 0) {
+                    doc.setTextColor(100);
+                    doc.setFillColor(200, 0, 0);
+                    doc.rect(data.settings.margin.left, row.y, data.table.width, 20, 'S');
+                    doc.autoTableText("OFERTA ECONÓMICA", data.settings.margin.left + data.table.width / 2, row.y + row.height / 2, {
+                        halign: 'center',
+                        valign: 'middle'
+                    });
+                    data.cursor.y += 20;
+                }
+            },
 
-	theme: 'grid',
-	startY: 450
-});
+        theme: 'grid',
+        startY: 450
+    });
 
-	//CABEZA Y PIE DE PÁGINA
+    //CABEZA Y PIE DE PÁGINA
     var header = getHeader(doc);
     var footer = getFooter(doc);
-	//generamos tabla presupesto
-	//INDICAMOS A DOC LAS OPCIONES
+    //generamos tabla presupesto
+    //INDICAMOS A DOC LAS OPCIONES
     var options = {
         beforePageContent: header,
         afterPageContent: footer,
         startY: 470,
         columnStyles: {
-	        desc: {
-	        	fillColor: 0,
-	        	columnWidth: 300 // 'auto', 'wrap' or a number 
-	        },
-	        unidades: {
-	        	columnWidth: 'auto',
-	    		valign: 'middle', // top, middle, bottom 
-	    	},
-	        total: {
-	        	textColor: 0,
-	        	fontStyle: 'bold',
-	        	halign: 'right', // left, center, right 
-    			valign: 'middle', // top, middle, bottom 
-    			fillStyle: 'F', // 'S', 'F' or 'DF' (stroke, fill or fill then stroke) 
-	        },
-	        euro: {
-	        	columnWidth: 'auto' // 'auto', 'wrap' or a number 
-	        },
-	        price_ud: {
-	        	halign: 'right', // left, center, right 
-    			valign: 'middle', // top, middle, bottom 
-	        }
-	    },
-	    //styles: {overflow: 'linebreak'},
-		//theme: 'grid',
-		
+            desc: {
+                fillColor: 0,
+                columnWidth: 300 // 'auto', 'wrap' or a number 
+            },
+            unidades: {
+                columnWidth: 'auto',
+                valign: 'middle', // top, middle, bottom 
+            },
+            total: {
+                textColor: 0,
+                fontStyle: 'bold',
+                halign: 'right', // left, center, right 
+                valign: 'middle', // top, middle, bottom 
+                fillStyle: 'F', // 'S', 'F' or 'DF' (stroke, fill or fill then stroke) 
+            },
+            euro: {
+                columnWidth: 'auto' // 'auto', 'wrap' or a number 
+            },
+            price_ud: {
+                halign: 'right', // left, center, right 
+                valign: 'middle', // top, middle, bottom 
+            }
+        },
+        //styles: {overflow: 'linebreak'},
+        //theme: 'grid',
+        
         margin: {top: 80},
         drawHeaderRow: function() {
             // Don't draw header row
@@ -317,7 +375,7 @@ doc.autoTable(getOfertaEconomica(),getDataOfertaEconomica(), {
 
 function getHeader(doc) {
 
-	var header = function (data) {
+    var header = function (data) {
         doc.setFontSize(10);
         doc.setTextColor(40);
         doc.setFontStyle('normal');
@@ -345,14 +403,14 @@ function getFooter (doc) {
 };
 
 function getFechaText() {
-	var meses = new Array ("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
-	var f=new Date();
-	return "Fecha:" + f.getDate() + " de " + meses[f.getMonth()] + " de " + f.getFullYear();
+    var meses = new Array ("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
+    var f=new Date();
+    return "Fecha:" + f.getDate() + " de " + meses[f.getMonth()] + " de " + f.getFullYear();
 }
 
 function getFechaBasic() {
-	var f = new Date();
-	return f.getDate() + "/" + (f.getMonth() +1) + "/" + f.getFullYear();
+    var f = new Date();
+    return f.getDate() + "/" + (f.getMonth() +1) + "/" + f.getFullYear();
 }
 
 // IMAGEN QUE SE REEMPLAZARÁ

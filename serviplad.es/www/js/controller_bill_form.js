@@ -104,7 +104,7 @@ $scope.pintaLinea = function(key) {
 
     $scope.saveAndUpdate = function() {
         alert('go to save');
-        myTest();
+        pdfPresupuesto($scope.factura);
     }
 
     $scope.submit = function() {

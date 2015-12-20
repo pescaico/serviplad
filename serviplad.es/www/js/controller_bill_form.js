@@ -79,12 +79,13 @@ $scope.pintaLinea = function(key) {
 
 
     if (Object.keys(facturaShared.message).length == 0) {
+
         $scope.factura = {
             fecha: new Date(),
             direccion: "",
             provincia: "",
             ciudad: "",
-            cliente: null,
+            cliente: {nombre: '', apellidos:'', id:-1, nombreCompleto: '', dnicif:'Nuevo'},
             summary: "",
             materiales: []
         };
@@ -97,6 +98,22 @@ $scope.pintaLinea = function(key) {
     }
 
 
+    if ($scope.factura.cliente != null) {
+            $scope.factura.cliente.toString = function clienteToString() {
+                return $scope.factura.cliente.nombre + " (" + $scope.factura.cliente.dnicif + ") ";
+            };
+        }
+
+        if ($scope.factura.provincia != null) {
+            $scope.factura.provincia.toString = function provinciaToString() {
+                return $scope.factura.provincia.nombre;
+            };
+        }
+        if ($scope.factura.provincia != null) {
+            $scope.factura.ciudad.toString = function ciudadToString() {
+                return $scope.factura.ciudad.nombre;
+            };
+        }
 
     $scope.isOk = function() {
         return $scope.billForm.$valid;
@@ -142,6 +159,8 @@ $scope.pintaLinea = function(key) {
 
     $scope.removeLinea = function(linea, idDiv) {
         delete $scope.factura.materiales[linea];
+        $scope.factura.materiales.splice(linea, 1);
+
         angular.element(document.getElementById('button-remove-factura'+idDiv)).parent().remove();
         $scope.numLineas--;
 

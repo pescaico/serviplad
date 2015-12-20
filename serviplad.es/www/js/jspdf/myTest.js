@@ -1,12 +1,18 @@
 var dataCliente = [];
 var functionsTest = {};
+var descripcion = "";
+var materiales = [];
 
 pdfPresupuesto = function(factura) {
     var doc = new jsPDF('p', 'pt');
     
     var type="PRESUPUESTO";
     var pdf="";//serviplad_PRESUPUESTO_20151022132011DNI/NIF
+
     setDataClientePresupuesto(factura);
+    setDescripcion(factura);
+    setMateriales(factura);
+
     if(type == "PRESUPUESTO") {
         generatePdfPresupuesto(doc);
         pdf="presupuesto.pdf";
@@ -72,46 +78,40 @@ var getColsPresupuesto = function () {
 };
 
 // Aquí se debe de obtener la info desde el formulario
-function getDataPresupuesto(rowCount) {
-    rowCount = 10;
+function getDataPresupuesto() {
     var data = [];
+    var rowCount = materiales.length;
+    var baseImponible = 0;
 
-    /*data.push({
-            desc: "Descripción ",
-            ud: "Unidades",
-            price_ud: "€/Ud",
-            total: "Total",
-            euros: "€"
-        });*/
-
-    for (var j = 1; j <= rowCount; j++) {
+    for (var j = 0; j < rowCount; j++) {
         data.push({
-            desc: "PRUEBA BONITA " + j,
-            ud: j * 10,
-            price_ud: 5,
-            total: (j*10)*5,
+            desc: materiales[j].desc,
+            ud: materiales[j].ud,
+            price_ud: ((materiales[j].price_ud.toFixed(2)).toString()).replace(".",","),
+            total: (((materiales[j].ud * materiales[j].price_ud).toFixed(2)).toString()).replace(".",","),
             euros: "€"
         });
+        baseImponible += materiales[j].ud * materiales[j].price_ud
     }
     data.push({
         desc: "",
         ud: "",
         price_ud: "Base Imponible",
-        total: "2555",
+        total: ((baseImponible.toFixed(2)).toString()).replace(".",","),
         euros: "€"
     });
     data.push({
         desc: "",
         ud: "",
         price_ud: "IVA 21%",
-        total: "",
+        total: (((baseImponible * 0.21).toFixed(2)).toString()).replace(".",","),
         euros: "€"
     });
     data.push({
         desc: "",
         ud: "",
         price_ud: "TOTAL",
-        total: "",
+        total: (((baseImponible * 1.21).toFixed(2)).toString()).replace(".",","),
         euros: "€"
     });
     return data;
@@ -127,6 +127,28 @@ var getColsClientePresupuesto = function () {
 };
 
 
+
+
+function setMateriales(factura) {
+    materiales = [];
+    var cont = 0;
+    for ( var i in factura.materiales) 
+    {
+        materiales[cont] =
+        {
+            desc: factura.materiales[i].nombre,
+            ud: factura.materiales[i].cantidad,
+            price_ud: factura.materiales[i].precio,
+        };
+        cont++;
+    }
+
+}; 
+
+function setDescripcion(factura) {
+    descripcion = factura.summary;
+};
+
 function setDataClientePresupuesto(factura) {
     dataCliente = [];
     var nombre, apellidos, cifNif, tlf, direccion, ciudad, provincia;
@@ -134,7 +156,8 @@ function setDataClientePresupuesto(factura) {
     direccion = factura.direccion;
     tlf = factura.cliente.telefono;
     cifNif = factura.cliente.dnicif;
-    nombre  = factura.cliente.nombre;
+    nombre = factura.cliente.nombre;
+    apellidos = factura.cliente.apellidos;
     
     if(typeof factura.provincia.nombre === 'undefined'){
         provincia = factura.provincia;
@@ -156,11 +179,6 @@ function setDataClientePresupuesto(factura) {
 };
 
 function getDataClientePresupuesto() {
-    /*var dataCliente = [];
-        dataCliente.push({key: "NOMBRE: ", value: "valor"});
-        dataCliente.push({key: "CIF/NIF: ", value: "9873652E"});
-        dataCliente.push({key: "TELÉFONO: ", value: "valor"});
-        dataCliente.push({key: "DIRECCIÓN: ", value: "C/la más larga a asdfasdfasdfasdfasdf asdf asdf asdf asdf asfasdfasdfasdfasdfasdfasdfasdfasdf awdfasdf ver si se puede hacer split"});*/
     return dataCliente;
 }
 
@@ -194,7 +212,7 @@ function getDataOfertaEconomica() {
 
 function getDataServicioARealizar() {
     var data = [];
-        data.push({descripcion: "Descripción blab blasñlkasd fasdñlfkasjdf asdñlkjasdfñlkasjdf<br/>asdf"});
+        data.push({descripcion: descripcion});
     return data;
 }
 
@@ -207,12 +225,12 @@ function generatePdfPresupuesto(doc) {
     doc.text("SERVICIOS PLADUR, C.B.", 40, 70);
     doc.text("Jose Hernández Estevan", 40, 83);
     doc.text("Pablo Navarro Navarro", 40, 96);
-    doc.text("cif: E-54714720", 40, 116);
+    doc.text("CIF: E-54714720", 40, 116);
     doc.text("TELF: 626 705 792 / 679 398 496", 40, 129);
     doc.text("DIRECCIÓN: 03400 Villena (Alicante)", 40, 142);
     doc.addImage(serviPladLogo, 'JPEG', 300, 60, 250, 50);
 
-
+    //FECHA
     var meses = new Array ("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
     var f=new Date();
         doc.text("ID Factura: SP" + f.getFullYear() + f.getMonth() + f.getDate() + f.getHours() +  f.getMinutes() + f.getSeconds(), 400, 180);
@@ -226,6 +244,7 @@ function generatePdfPresupuesto(doc) {
         doc.text("PRESUPUESTO DE SERVICIOS DE ESCAYOLA Y PLADUR.", 75,240);
 
 
+    //DATOS DE PRESUPUESTO
     doc.autoTable(getColsClientePresupuesto(), getDataClientePresupuesto(), {
         columnStyles: {
             id: {fillColor: 0},
@@ -265,7 +284,7 @@ function generatePdfPresupuesto(doc) {
 
     });
 
-
+    //DESCRIPCIÓN DEL SERVICIO
     doc.autoTable(getServicioARealizar(),getDataServicioARealizar(), {
         columnStyles: {
             id: {fillColor: 0},
@@ -295,7 +314,7 @@ function generatePdfPresupuesto(doc) {
     });
 
 
-
+    //OFERTA ECONOMICA
     doc.autoTable(getOfertaEconomica(),getDataOfertaEconomica(), {
         columnStyles: {
             id: {fillColor: 0},
@@ -335,16 +354,32 @@ function generatePdfPresupuesto(doc) {
         beforePageContent: header,
         afterPageContent: footer,
         startY: 470,
+         drawHeaderCell: function (cell, data) {
+            if (cell.raw.localeCompare('Descripción') != 0) {
+                cell.styles.valign='middle';
+                cell.styles.halign='right';
+                //cell.styles.fillColor=100;
+            }
+        },
         columnStyles: {
             desc: {
-                fillColor: 0,
-                columnWidth: 300 // 'auto', 'wrap' or a number 
+                //fillColor: 0,
+                columnWidth: 300, // 'auto', 'wrap' or a number 
+                valign: 'middle', // top, middle, bottom 
+                halign: 'left'
             },
             unidades: {
                 columnWidth: 'auto',
                 valign: 'middle', // top, middle, bottom 
+                halign: 'right'
+            },
+            price_ud: {
+                columnWidth: 'auto',
+                halign: 'right', // left, center, right 
+                valign: 'middle', // top, middle, bottom 
             },
             total: {
+                columnWidth: 'auto',
                 textColor: 0,
                 fontStyle: 'bold',
                 halign: 'right', // left, center, right 
@@ -352,9 +387,7 @@ function generatePdfPresupuesto(doc) {
                 fillStyle: 'F', // 'S', 'F' or 'DF' (stroke, fill or fill then stroke) 
             },
             euro: {
-                columnWidth: 'auto' // 'auto', 'wrap' or a number 
-            },
-            price_ud: {
+                columnWidth: 'auto', // 'auto', 'wrap' or a number 
                 halign: 'right', // left, center, right 
                 valign: 'middle', // top, middle, bottom 
             }

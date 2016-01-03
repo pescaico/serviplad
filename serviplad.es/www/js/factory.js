@@ -18,32 +18,37 @@ angular.module('starter.controllers')
 
     return sharedFacturaService;
 })
-.factory('DataService', function() {
+
+.factory('$localstorage', ['$window', function($window) {
+  return {
+    set: function(key, value) {
+      $window.localStorage[key  ] = value;
+    },
+    get: function(key, defaultValue) {
+      return $window.localStorage[key] || defaultValue;
+    },
+    setObject: function(key, value) {
+      $window.localStorage[key] = JSON.stringify(value);
+    },
+    getObject: function(key) {
+        return JSON.parse($window.localStorage[key] || '{}');
+    }
+  }
+}])
+.factory('DataService', ['$localstorage', function($localstorage) {
+
+  var provinces = typeof $localstorage.get('provincias') === 'undefined'? [] : JSON.parse($localstorage.get('provincias'));
+  var cities = typeof $localstorage.get('ciudades') === 'undefined'? [] : JSON.parse($localstorage.get('ciudades'));
+  var clients = typeof $localstorage.get('clientes') === 'undefined'? [] : JSON.parse($localstorage.get('clientes'));
+  
   var listsData =
-  {provincias:[
-    {nombre:'Alicante', id:1},
-    {nombre:'Albacete', id:2},
-    {nombre:'Madrid', id:14}
-    ],
-    ciudades:[
-    {nombre:'Villena', id:2},
-    {nombre:'Caudete', id:4},
-    {nombre:'Tres Cantos', id:88}
-    ],
-    clientes:[
-    {nombre: 'Juan', apellidos:' TH E ', id:1, nombreCompleto: 'Juan  (74004106l)'},
-    {nombre: 'Josh', apellidos:'E H E ', id:2, nombreCompleto: 'JOSH 2 (74004106l)'},
-    {nombre: 'Juma', apellidos:'ER H E ', id:3, nombreCompleto: 'JUMA  THE (74004106l)'},
-    {nombre: 'Anto', apellidos:'A H E ', id:4, nombreCompleto: 'Antonio THE (74004106l)'}
-    ],
-    contactos:[
-    {nombre: 'Paco', apellidos:' cholo ', id:1},
-    {nombre: 'Pepe', apellidos:'niono', id:2},
-    {nombre: 'Pana', apellidos:'bobo ', id:3},
-    {nombre: 'Pere', apellidos:'hgo ', id:4}]
+  {provincias:provinces,
+    ciudades:cities,
+    clientes:clients,
+    contactos:[]
   }
  return {
-  getList: function() { return listsData}
+  getList: function()    { return listsData}
   };
-});
+}]);
 

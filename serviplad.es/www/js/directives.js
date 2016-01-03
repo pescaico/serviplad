@@ -72,7 +72,7 @@ angular.module('starter.controllers')
       };
 
       scope.$watch('ngModel', function(newValue, oldValue) {
-        if (newValue !== oldValue) {
+        if (newValue !== oldValue && typeof newValue !== 'undefined') {
           if (scope.showHide === false) {
             element.find('input').val(newValue[scope.labelField]);
           }

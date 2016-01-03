@@ -1,6 +1,6 @@
 angular.module('starter.controllers')
 
-.controller('NuevaFacturaCtrl', function($scope, $rootScope, DataService, facturaShared, $stateParams, $ionicPopup, $timeout, $http, $compile, $state) {
+.controller('NuevaFacturaCtrl', function($scope, $rootScope, DataService, facturaShared, $stateParams, $ionicPopup, $timeout, $http, $compile, $state, $localstorage) {
     //$scope.contacto = FacturasService.get($stateParams.facturaId);
     $scope.title = "Nueva Factura";
     //$scope.focusManager = { focusInputOnBlur: true};
@@ -104,6 +104,8 @@ $scope.pintaLinea = function(key) {
 
     $scope.saveAndUpdate = function() {
         alert('go to save');
+        saveCity(DataService, $localstorage, $scope.factura.ciudad );
+        saveProvince(DataService, $localstorage, $scope.factura.provincia );
         myTest();
     }
 
@@ -115,6 +117,19 @@ $scope.pintaLinea = function(key) {
 
     $scope.goNewClienteForm = function() {
         if ($scope.factura.cliente != null) {
+            $scope.factura.cliente.toString = function clienteToString() {
+                return $scope.factura.cliente.nombre + " (" + $scope.factura.cliente.dnicif + ") ";
+            };
+        }
+        else
+        {
+            $scope.factura.cliente = 
+            {
+                nombre :"",
+                dnicif : '',
+                nombreCompleto: '',
+                apellidos:''
+            };
             $scope.factura.cliente.toString = function clienteToString() {
                 return $scope.factura.cliente.nombre + " (" + $scope.factura.cliente.dnicif + ") ";
             };

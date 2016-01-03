@@ -1,5 +1,5 @@
 angular.module('starter.controllers')
-.controller('NuevoClienteCtrl', function($scope, $state, facturaShared, $stateParams, $http) {
+.controller('NuevoClienteCtrl', function($scope, $state, facturaShared, $stateParams, $http, $localstorage, DataService) {
     $scope.title = "Nuevo Cliente";
 
     $scope.isOk = function() {
@@ -7,13 +7,9 @@ angular.module('starter.controllers')
     }
 
     $scope.saveAndGoBack = function() {
-        //$window.history.back();
-        if (facturaShared.type == "cliente") {
-            facturaShared.message.cliente = $scope.cliente;
-        } else {
-            facturaShared.message.contacto = $scope.cliente;
-        }
+        facturaShared.message.cliente = $scope.cliente;
         facturaShared.prepForBroadcast(facturaShared.message, "");
+        saveClient(DataService, $localstorage, facturaShared.message.cliente);
         $state.go('app.nuevaFactura');
 
     }

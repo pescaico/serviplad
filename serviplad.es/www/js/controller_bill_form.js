@@ -121,7 +121,7 @@ $scope.pintaLinea = function(key) {
 
     $scope.saveAndUpdate = function() {
         alert('go to save');
-        pdfPresupuesto($scope.factura);
+        generatePdf($scope.factura, "PRESUPUESTO");
     }
 
     $scope.submit = function() {

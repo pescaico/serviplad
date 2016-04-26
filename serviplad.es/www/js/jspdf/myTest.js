@@ -2,26 +2,30 @@ var dataCliente = [];
 var functionsTest = {};
 var descripcion = "";
 var materiales = [];
+var date =new Date();
+var idDocumento= date.getFullYear() + date.getMonth() + date.getDate() + date.getHours() +  date.getMinutes() + date.getSeconds();
 
-pdfPresupuesto = function(factura) {
+generatePdf = function(factura, type) {
     var doc = new jsPDF('p', 'pt');
-    
-    var type="PRESUPUESTO";
     var pdf="";//serviplad_PRESUPUESTO_20151022132011DNI/NIF
 
-    setDataClientePresupuesto(factura);
+    setDataCliente(factura);
     setDescripcion(factura);
     setMateriales(factura);
 
     if(type == "PRESUPUESTO") {
-        generatePdfPresupuesto(doc);
-        pdf="presupuesto.pdf";
+        generatePdfPresupuesto(doc, type);
+        idDocumento = "SPP" + idDocumento;
+        pdf=idDocumento + ".pdf";
     } else if(type == "NOTA") {
         generatePdfNota(doc);
-        pdf="nota.pdf";
+        idDocumento = "SPN" + idDocumento;
+        pdf=idDocumento + ".pdf";
+
     } else if(type == "FACTURA") {
         generatePdfFactura(doc);
-        pdf="factura.pdf";
+        idDocumento = "SPF" + idDocumento;
+        pdf=idDocumento + ".pdf";
     } 
 
 
@@ -32,124 +36,21 @@ pdfPresupuesto = function(factura) {
     }    
 
     //guardamos
-    doc.save("myTest.pdf");
-    return doc;
-};
-
-// Default - shows what a default table looks like
-myTest = function () {
-    var doc = new jsPDF('p', 'pt');
-    
-    var type="PRESUPUESTO";
-    var pdf="";//serviplad_PRESUPUESTO_20151022132011DNI/NIF
-    if(type == "PRESUPUESTO") {
-        generatePdfPresupuesto(doc);
-        pdf="presupuesto.pdf";
-    } else if(type == "NOTA") {
-        generatePdfNota(doc);
-        pdf="nota.pdf";
-    } else if(type == "FACTURA") {
-        generatePdfFactura(doc);
-        pdf="factura.pdf";
-    } 
-
-    //SETEAMOS EL FOOTER (// Total page number plugin only available in jspdf v1.0+)
-    var totalPagesExp = "{total_pages_count_string}";    
-    if (typeof doc.putTotalPages === 'function') {
-        doc.putTotalPages(totalPagesExp);
-    }    
-
-    //guardamos
-    doc.save("myTest.pdf");
+    doc.save(pdf);
     return doc;
 };
 
 
-
-// Obtener Columnas de cliente presupuesto
-var getColsPresupuesto = function () {
-    return [
-        {title: "Descripción", dataKey: "desc"},
-        {title: "Unidades", dataKey: "ud"},
-        {title: "€/Ud", dataKey: "price_ud"},
-        {title: "Total", dataKey: "total"},
-        {title: "€", dataKey: "euros"}
-    ];
-};
-
-// Aquí se debe de obtener la info desde el formulario
-function getDataPresupuesto() {
-    var data = [];
-    var rowCount = materiales.length;
-    var baseImponible = 0;
-
-    for (var j = 0; j < rowCount; j++) {
-        data.push({
-            desc: materiales[j].desc,
-            ud: materiales[j].ud,
-            price_ud: ((materiales[j].price_ud.toFixed(2)).toString()).replace(".",","),
-            total: (((materiales[j].ud * materiales[j].price_ud).toFixed(2)).toString()).replace(".",","),
-            euros: "€"
-        });
-        baseImponible += materiales[j].ud * materiales[j].price_ud
-    }
-    data.push({
-        desc: "",
-        ud: "",
-        price_ud: "Base Imponible",
-        total: ((baseImponible.toFixed(2)).toString()).replace(".",","),
-        euros: "€"
-    });
-    data.push({
-        desc: "",
-        ud: "",
-        price_ud: "IVA 21%",
-        total: (((baseImponible * 0.21).toFixed(2)).toString()).replace(".",","),
-        euros: "€"
-    });
-    data.push({
-        desc: "",
-        ud: "",
-        price_ud: "TOTAL",
-        total: (((baseImponible * 1.21).toFixed(2)).toString()).replace(".",","),
-        euros: "€"
-    });
-    return data;
-}
-
-
-// Obtener Columnas de presupuesto
-var getColsClientePresupuesto = function () {
-    return [
-        {title: "Key:", dataKey: "key"},
-        {title: "Value", dataKey: "value"}
-    ];
-};
-
-
-
-
-function setMateriales(factura) {
-    materiales = [];
-    var cont = 0;
-    for ( var i in factura.materiales) 
-    {
-        materiales[cont] =
-        {
-            desc: factura.materiales[i].nombre,
-            ud: factura.materiales[i].cantidad,
-            price_ud: factura.materiales[i].precio,
-        };
-        cont++;
-    }
-
-}; 
-
+/*****************************************************
+*                                                    *
+*   DATOS COMUNES                                    *
+*                                                    *
+******************************************************/
 function setDescripcion(factura) {
     descripcion = factura.summary;
 };
 
-function setDataClientePresupuesto(factura) {
+function setDataCliente(factura) {
     dataCliente = [];
     var nombre, apellidos, cifNif, tlf, direccion, ciudad, provincia;
     
@@ -178,46 +79,21 @@ function setDataClientePresupuesto(factura) {
     return dataCliente;
 };
 
-function getDataClientePresupuesto() {
+function getDataCliente() {
     return dataCliente;
 }
 
-
-function generatePdfFactura(doc) {
-//doc.autoTable(getColsFactura, getDataFactura(40));
-};
-
-function generatePdfNota(doc) {
-    //doc.autoTable(getColsNota, getDataNot(40));
-};
-
-
-var getServicioARealizar = function () {
+// Obtener Columnas de presupuesto
+var getColsCliente = function () {
     return [
-        {title: "DESCRIPCIÓN DEL SERVICIO A REALIZAR:", dataKey: "descripcion"}
-    ];
-};
-
-var getOfertaEconomica = function () {
-    return [
-        {title: "OFERTA ECONÓMICA:", dataKey: "descripcion"}
+        {title: "Key:", dataKey: "key"},
+        {title: "Value", dataKey: "value"}
     ];
 };
 
 
-function getDataOfertaEconomica() {
-    var data = [];
-    return data;
-}
-
-function getDataServicioARealizar() {
-    var data = [];
-        data.push({descripcion: descripcion});
-    return data;
-}
-
-
-function generatePdfPresupuesto(doc) {
+function fillPdfInfoEmpresa(doc)
+{
     //DATOS CLIENTE
     doc.setFontSize(10);
     doc.setFontStyle('normal');
@@ -230,22 +106,23 @@ function generatePdfPresupuesto(doc) {
     doc.text("DIRECCIÓN: 03400 Villena (Alicante)", 40, 142);
     doc.addImage(serviPladLogo, 'JPEG', 300, 60, 250, 50);
 
-    //FECHA
-    var meses = new Array ("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
-    var f=new Date();
-        doc.text("ID Factura: SP" + f.getFullYear() + f.getMonth() + f.getDate() + f.getHours() +  f.getMinutes() + f.getSeconds(), 400, 180);
-        doc.text("Fecha: " + f.getDate() + " de " + meses[f.getMonth()] + " de " + f.getFullYear(), 400, 200);
+}
 
 
-        doc.setTextColor(100);
-        doc.setFontSize(16);
-        doc.setFontStyle('bold');
-        doc.setFontStyle('normal');
-        doc.text("PRESUPUESTO DE SERVICIOS DE ESCAYOLA Y PLADUR.", 75,240);
+function fillPdfInfoDocumento(doc, tipo) {
+    //FECHA    
+    doc.text("ID" + tipo +": " + idDocumento, 400, 180);
+    doc.text("Fecha: " + date.getDate() + " de " + meses[date.getMonth()] + " de " + date.getFullYear(), 400, 200);
 
+    doc.setTextColor(100);
+    doc.setFontSize(16);
+    doc.setFontStyle('bold');
+    doc.setFontStyle('normal');
+    doc.text(tipo + " DE SERVICIOS DE ESCAYOLA Y PLADUR.", 75,240);
+}
 
-    //DATOS DE PRESUPUESTO
-    doc.autoTable(getColsClientePresupuesto(), getDataClientePresupuesto(), {
+function fillPdfInfoCliente(doc) {
+    doc.autoTable(getColsCliente(), getDataCliente(), {
         columnStyles: {
             id: {fillColor: 0},
             text: {columnWidth: 'wrap'}
@@ -283,7 +160,120 @@ function generatePdfPresupuesto(doc) {
         },
 
     });
+}
 
+/*****************************************************
+*                                                    *
+*   RELACIONADO CON PRESUPUESTO Y FACTURA            *
+*                                                    *
+******************************************************/
+//NUMERO DE LINEAS (COLUMNAS)
+var getColsPresupuesto = function () {
+    return [
+        {title: "Descripción", dataKey: "desc"},
+        {title: "Unidades", dataKey: "ud"},
+        {title: "€/Ud", dataKey: "price_ud"},
+        {title: "Total", dataKey: "total"},
+        {title: "€", dataKey: "euros"}
+    ];
+};
+
+//NUMERO DE LINEAS (DATOS)
+function setMateriales(factura) {
+    materiales = [];
+    var cont = 0;
+    for ( var i in factura.materiales) 
+    {
+        materiales[cont] =
+        {
+            desc: factura.materiales[i].nombre,
+            ud: factura.materiales[i].cantidad,
+            price_ud: factura.materiales[i].precio,
+        };
+        cont++;
+    }
+}; 
+
+//NUMERO DE LINEAS PARSEADAS (DATOS) 
+function getDataPresupuesto() {
+    var data = [];
+    var rowCount = materiales.length;
+    var baseImponible = 0;
+
+    for (var j = 0; j < rowCount; j++) {
+        data.push({
+            desc: materiales[j].desc,
+            ud: materiales[j].ud,
+            price_ud: formatNumber(materiales[j].price_ud),
+            total: formatNumber(materiales[j].ud * materiales[j].price_ud),
+            euros: "€"
+        });
+        baseImponible += materiales[j].ud * materiales[j].price_ud
+    }
+    data.push({
+        desc: "",
+        ud: "",
+        price_ud: "Base Imponible",
+        total: formatNumber(baseImponible),
+        euros: "€"
+    });
+    data.push({
+        desc: "",
+        ud: "",
+        price_ud: "IVA 21%",
+        total: formatNumber(baseImponible * 0.21),
+        euros: "€"
+    });
+    data.push({
+        desc: "",
+        ud: "",
+        price_ud: "TOTAL",
+        total: formatNumber(baseImponible * 1.21),
+        euros: "€"
+    });
+    return data;
+}
+
+function generatePdfFactura(doc) {
+//doc.autoTable(getColsFactura, getDataFactura(40));
+};
+
+function generatePdfNota(doc) {
+    //doc.autoTable(getColsNota, getDataNot(40));
+};
+
+
+var getServicioARealizar = function () {
+    return [
+        {title: "DESCRIPCIÓN DEL SERVICIO A REALIZAR:", dataKey: "descripcion"}
+    ];
+};
+
+var getOfertaEconomica = function () {
+    return [
+        {title: "OFERTA ECONÓMICA:", dataKey: "descripcion"}
+    ];
+};
+
+
+function getDataOfertaEconomica() {
+    var data = [];
+    return data;
+}
+
+function getDataServicioARealizar() {
+    var data = [];
+        data.push({descripcion: descripcion});
+    return data;
+}
+
+
+function generatePdfPresupuesto(doc, tipo) {
+    fillPdfInfoEmpresa(doc);
+    fillPdfInfoDocumento(doc, tipo);
+    fillPdfInfoCliente(doc);
+
+    
     //DESCRIPCIÓN DEL SERVICIO
     doc.autoTable(getServicioARealizar(),getDataServicioARealizar(), {
         columnStyles: {
@@ -406,6 +396,13 @@ function generatePdfPresupuesto(doc) {
     doc.autoTable(getColsPresupuesto(), getDataPresupuesto(), options);
 };
 
+
+
+/*****************************************************
+*                                                    *
+*   DATOS GENERALES                                  *
+*                                                    *
+******************************************************/
 function getHeader(doc) {
 
     var header = function (data) {
@@ -430,11 +427,14 @@ function getFooter (doc) {
         //doc.styles.halign = 'right';
         //doc.text(getFechaBasic(), data.settings.margin.left + 250, doc.internal.pageSize.height - 30);
     };
-
-
     return footer;
 };
 
+/*****************************************************
+*                                                    *
+*   UTILIDADES                                       *
+*                                                    *
+******************************************************/
 function getFechaText() {
     var meses = new Array ("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
     var f=new Date();
@@ -445,6 +445,12 @@ function getFechaBasic() {
     var f = new Date();
     return f.getDate() + "/" + (f.getMonth() +1) + "/" + f.getFullYear();
 }
+
+function formatNumber(number)
+{
+    return ((number.toFixed(2)).toString()).replace(".",",");
+}
+var meses = new Array ("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
 
 // IMAGEN QUE SE REEMPLAZARÁ
 // Use http://dopiaza.org/tools/datauri or similar service to convert an image into image data
